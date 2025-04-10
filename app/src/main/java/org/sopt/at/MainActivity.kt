@@ -1,6 +1,9 @@
 package org.sopt.at
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -19,6 +22,21 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             ATSOPTANDROIDTheme {
+
+                val sharedPref = getSharedPreferences("auth", Context.MODE_PRIVATE)
+                val isLoggedIn = sharedPref.getBoolean("isLoggedIn", false)
+
+                Log.d("MainActivity", "isLoggedIn 값: $isLoggedIn") // 현재 로그인 상태 확인
+
+                val intent = if (isLoggedIn) {
+                    Intent(this, MyActivity::class.java)
+                } else {
+                    Intent(this, SignInActivity::class.java)
+                }
+
+                startActivity(intent)
+                finish()
+
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Greeting(
                         name = "Android",
