@@ -14,6 +14,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import org.sopt.at.data.AuthPreferences
+import org.sopt.at.ui.my.MyActivity
+import org.sopt.at.ui.signin.SignInActivity
 import org.sopt.at.ui.theme.ATSOPTANDROIDTheme
 
 class MainActivity : ComponentActivity() {
@@ -23,10 +26,12 @@ class MainActivity : ComponentActivity() {
         setContent {
             ATSOPTANDROIDTheme {
 
-                val sharedPref = getSharedPreferences("auth", Context.MODE_PRIVATE)
-                val isLoggedIn = sharedPref.getBoolean("isLoggedIn", false)
+//                val sharedPref = getSharedPreferences("auth", Context.MODE_PRIVATE)
+//                val isLoggedIn = sharedPref.getBoolean("isLoggedIn", false)
 
-                Log.d("MainActivity", "isLoggedIn 값: $isLoggedIn") // 현재 로그인 상태 확인
+                val authPrefs = AuthPreferences(this)
+                val isLoggedIn = authPrefs.isLoggedIn()
+
 
                 val intent = if (isLoggedIn) {
                     Intent(this, MyActivity::class.java)
