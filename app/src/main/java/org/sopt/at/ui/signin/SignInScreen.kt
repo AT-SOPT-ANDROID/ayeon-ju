@@ -8,6 +8,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -20,6 +21,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -30,6 +32,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -53,15 +56,15 @@ import org.sopt.at.ui.signup.SignUpActivity
 @Composable
 fun SignInScreen(
     modifier: Modifier = Modifier,
-    snackbarHostState: SnackbarHostState
+    snackBarHostState: SnackbarHostState
 ) {
 
     var idText by remember { mutableStateOf("") }
     var passwordText by remember { mutableStateOf("") }
     var isVisiblePassword by remember { mutableStateOf(false) }
 
-    var signupId by remember { mutableStateOf(idText) }
-    var signupPassword by remember { mutableStateOf(passwordText) }
+    var signupId by rememberSaveable { mutableStateOf(idText) }
+    var signupPassword by rememberSaveable { mutableStateOf(passwordText) }
 
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
@@ -72,14 +75,17 @@ fun SignInScreen(
 
         if (result.resultCode == Activity.RESULT_OK) {
             val data = result.data
-            idText = data?.getStringExtra("id")?:""
-            passwordText = data?.getStringExtra("password")?:""
+            idText = data?.getStringExtra("id") ?: ""
+            passwordText = data?.getStringExtra("password") ?: ""
+
+
 
             signupId = idText
             signupPassword = passwordText
         }
 
     }
+
 
 
     Column(
@@ -155,7 +161,6 @@ fun SignInScreen(
                     shape = RoundedCornerShape(5.dp),
 
 
-                    // 비밀번호 숨기기
                     visualTransformation = if (isVisiblePassword) VisualTransformation.None else PasswordVisualTransformation(),
 
                     colors = TextFieldDefaults.colors(
@@ -203,7 +208,7 @@ fun SignInScreen(
                             context.startActivity(intent)
                         } else {
                             coroutineScope.launch {
-                                snackbarHostState.showSnackbar("아이디 또는 비밀번호가 일치하지 않습니다")
+                                snackBarHostState.showSnackbar("아이디 또는 비밀번호가 일치하지 않습니다")
                             }
                         }
 
@@ -263,14 +268,21 @@ fun SignInScreen(
                         modifier = Modifier
                             .clickable {
 
-                                resultLauncher.launch(Intent(context, SignUpActivity::class.java))
-
+                                resultLauncher.launch(
+                                    Intent(
+                                        context,
+                                        SignUpActivity::class.java
+                                    )
+                                )
                             }
                     )
                 }
 
                 Text(
-                    text = stringResource(R.string.login_detail_info).replace("보호되며,", "보호되며,\n"),
+                    text = stringResource(R.string.login_detail_info).replace(
+                        "보호되며,",
+                        "보호되며,\n"
+                    ),
                     color = Color.LightGray,
                     fontSize = 10.sp,
                     modifier = Modifier
@@ -281,5 +293,4 @@ fun SignInScreen(
             }
         }
     }
-
 }
