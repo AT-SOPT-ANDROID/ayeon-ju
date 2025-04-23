@@ -1,4 +1,4 @@
-package org.sopt.at
+package org.sopt.at.ui.my
 
 import android.app.Activity
 import android.content.Context
@@ -27,6 +27,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import org.sopt.at.data.AuthPreferences
+import org.sopt.at.ui.component.TvingBasicButton
+import org.sopt.at.ui.signin.SignInActivity
 import org.sopt.at.ui.theme.ATSOPTANDROIDTheme
 
 class MyActivity : ComponentActivity() {
@@ -34,13 +37,21 @@ class MyActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
 
-        // userId 받아오기
         val userId = intent.getStringExtra("id") ?: "id"
         enableEdgeToEdge()
         setContent {
             ATSOPTANDROIDTheme {
+
+
+                val context = this
+
+
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    MyPage(modifier = Modifier.padding(innerPadding), userId = userId)
+                    MyPage(
+                        modifier = Modifier.padding(innerPadding),
+                        userId = userId,
+                        onLogoutClick = { logout(context) }
+                    )
                 }
             }
         }
@@ -48,9 +59,12 @@ class MyActivity : ComponentActivity() {
 }
 
 @Composable
-fun MyPage(modifier: Modifier = Modifier, userId: String) {
+fun MyPage(
+    modifier: Modifier = Modifier,
+    userId: String,
+    onLogoutClick: () -> Unit
+) {
 
-    val context = LocalContext.current
 
     Column(
         modifier = Modifier
@@ -68,41 +82,26 @@ fun MyPage(modifier: Modifier = Modifier, userId: String) {
             fontSize = 24.sp
         )
 
-        Button(
+        TvingBasicButton(
+            text = "로그아웃",
 
-            onClick = {
-
-                val sharedPref = context.getSharedPreferences("auth", Context.MODE_PRIVATE)
-                with(sharedPref.edit()) {
-                    putBoolean("isLoggedIn", false)
-                    apply()
-                }
-
-                val intent = Intent(context, SignInActivity::class.java)
-                context.startActivity(intent)
-                (context as? Activity)?.finish()
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(20.dp),
-            shape = RoundedCornerShape(5.dp),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Color.Transparent
-            ),
-            border = BorderStroke(1.dp, Color.LightGray)
-        ) {
-            Text("로그아웃", color = Color.LightGray)
-        }
+            onClick = onLogoutClick
+        )
 
     }
 
 
 }
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview5() {
-    ATSOPTANDROIDTheme {
-        MyPage(userId = "id")
-    }
+
+fun logout(context: Context) {
+
+
+    val authPrefs = AuthPreferences(context)
+    authPrefs.setLoggedIn(false)
+
+    val intent = Intent(context, SignInActivity::class.java)
+    context.startActivity(intent)
+    (context as? Activity)?.finish()
 }
+
