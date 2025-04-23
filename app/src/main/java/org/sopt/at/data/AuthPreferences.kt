@@ -7,13 +7,13 @@ class AuthPreferences(context: Context) {
 
     private val prefs = context.getSharedPreferences("auth", Context.MODE_PRIVATE)
 
-    fun setLoggedIn(isLoggedIn:Boolean) {
+    fun setLoggedIn(isLoggedIn: Boolean) {
 
         prefs.edit() { putBoolean("isLoggedIn", isLoggedIn) }
 
     }
 
-    fun isLoggedIn():Boolean {
+    fun isLoggedIn(): Boolean {
 
         return prefs.getBoolean("isLoggedIn", false)
 

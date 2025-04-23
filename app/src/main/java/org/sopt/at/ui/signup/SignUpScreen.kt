@@ -67,7 +67,7 @@ fun SignUpScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.Black),
-        verticalArrangement = Arrangement.SpaceBetween
+        verticalArrangement = Arrangement.SpaceEvenly
     ) {
         Image(
             painterResource(R.drawable.ic_back_arrow),
@@ -82,6 +82,7 @@ fun SignUpScreen(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
+                    .padding(15.dp)
                     .weight(1f),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -117,10 +118,6 @@ fun SignUpScreen(
                 )
 
 
-
-
-
-
             }
 
             TvingBasicButton(
@@ -132,7 +129,11 @@ fun SignUpScreen(
 
                     } else {
 
-                        Toast.makeText(context, "아이디는 영문 소문자, 숫자로 이루어진 6~12 자리여야합니다.", Toast.LENGTH_SHORT ).show()
+                        Toast.makeText(
+                            context,
+                            "아이디는 영문 소문자, 숫자로 이루어진 6~12 자리여야합니다.",
+                            Toast.LENGTH_SHORT
+                        ).show()
                         return@TvingBasicButton
 
                     }
@@ -140,11 +141,12 @@ fun SignUpScreen(
 
                 )
 
-        } else{
+        } else {
 
             Column(
                 modifier = Modifier
                     .fillMaxSize()
+                    .padding(15.dp)
                     .weight(1f),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -199,16 +201,17 @@ fun SignUpScreen(
                     if (viewModel.validatePassword()) {
                         onSignUpComplete()
                     } else {
-                        Toast.makeText(context, "비밀번호는 영문, 숫자, 특수문자를 포함한 8~12자리여야 합니다.", Toast.LENGTH_SHORT ).show()
+                        Toast.makeText(
+                            context,
+                            "비밀번호는 영문, 숫자, 특수문자를 포함한 8~12자리여야 합니다.",
+                            Toast.LENGTH_SHORT
+                        ).show()
                         return@TvingBasicButton
                     }
                 },
 
                 )
         }
-
-
-
 
 
     }
@@ -222,8 +225,6 @@ fun GreetingPreview4() {
 
         SignUpScreen(
             SignUpViewModel(), {})
-
-
 
 
     }

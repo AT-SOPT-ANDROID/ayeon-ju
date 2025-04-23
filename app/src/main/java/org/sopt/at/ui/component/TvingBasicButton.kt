@@ -20,11 +20,11 @@ import org.sopt.at.ui.theme.ATSOPTANDROIDTheme
 fun TvingBasicButton(
 
     text: String,
-    onClick: () ->Unit,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
 
 
-) {
+    ) {
 
     Button(
         onClick = onClick,
@@ -41,9 +41,9 @@ fun TvingBasicButton(
 
     ) {
 
-        Text(text, color = Color.DarkGray) }
+        Text(text, color = Color.DarkGray)
     }
-
+}
 
 
 @Preview(showBackground = true)

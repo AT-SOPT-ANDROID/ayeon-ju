@@ -2,6 +2,7 @@ package org.sopt.at.ui.component
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -23,22 +24,20 @@ import org.sopt.at.ui.theme.ATSOPTANDROIDTheme
 
 
 @Composable
-fun SignUpTextField (
+fun SignUpTextField(
 
     value: String,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
-    label : String,
+    label: String,
     isPasswordField: Boolean = false,
     isVisiblePassword: Boolean = false,
-    onPasswordVisibilityToggle : () -> Unit,
-
+    onPasswordVisibilityToggle: () -> Unit,
     onNextClick: (String) -> Unit,
     trailingIcon: (@Composable (() -> Unit))? = null,
 
 
-) {
-
+    ) {
 
 
     OutlinedTextField(
@@ -46,8 +45,7 @@ fun SignUpTextField (
         onValueChange = onValueChange,
         singleLine = true,
         modifier = modifier
-            .fillMaxWidth()
-            ,
+            .fillMaxWidth(),
 
         label = { Text(label, color = Color.Gray) },
         shape = RoundedCornerShape(5.dp),
@@ -68,23 +66,3 @@ fun SignUpTextField (
     )
 }
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview4() {
-    ATSOPTANDROIDTheme {
-
-        SignUpTextField(
-            value = "비밀번호",
-            onValueChange = {},
-            label = "",
-            isPasswordField = true,
-            isVisiblePassword = true,
-            onNextClick = {},
-            onPasswordVisibilityToggle = {},
-            trailingIcon = {
-                Text("👁") // 임시로 아이콘 대체
-            }
-        )
-
-    }
-}

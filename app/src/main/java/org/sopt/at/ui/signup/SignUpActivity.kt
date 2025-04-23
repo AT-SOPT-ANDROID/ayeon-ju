@@ -37,37 +37,23 @@ class SignUpActivity : ComponentActivity() {
             ATSOPTANDROIDTheme {
 
 
+                SignUpScreen(
+                    viewModel = viewModel,
+                    onSignUpComplete = {
 
-
-                    SignUpScreen(
-                        viewModel = viewModel,
-                        onSignUpComplete = {
-
-                            val intent = Intent().apply {
-                                putExtra("id", viewModel.id)
-                                putExtra("password", viewModel.password)
-                            }
-
-                            setResult(Activity.RESULT_OK, intent)
-                            finish()
-
+                        val intent = Intent().apply {
+                            putExtra("id", viewModel.id)
+                            putExtra("password", viewModel.password)
                         }
-                        )
 
+                        setResult(Activity.RESULT_OK, intent)
+                        finish()
 
+                    }
+                )
             }
         }
     }
 }
 
 
-
-
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview3() {
-    ATSOPTANDROIDTheme {
-        //SignUp()
-    }
-}
