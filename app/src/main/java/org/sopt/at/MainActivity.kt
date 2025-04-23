@@ -1,6 +1,9 @@
 package org.sopt.at
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -11,6 +14,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import org.sopt.at.data.AuthPreferences
+import org.sopt.at.ui.my.MyActivity
+import org.sopt.at.ui.signin.SignInActivity
 import org.sopt.at.ui.theme.ATSOPTANDROIDTheme
 
 class MainActivity : ComponentActivity() {
@@ -19,6 +25,23 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             ATSOPTANDROIDTheme {
+
+//                val sharedPref = getSharedPreferences("auth", Context.MODE_PRIVATE)
+//                val isLoggedIn = sharedPref.getBoolean("isLoggedIn", false)
+
+                val authPrefs = AuthPreferences(this)
+                val isLoggedIn = authPrefs.isLoggedIn()
+
+
+                val intent = if (isLoggedIn) {
+                    Intent(this, MyActivity::class.java)
+                } else {
+                    Intent(this, SignInActivity::class.java)
+                }
+
+                startActivity(intent)
+                finish()
+
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Greeting(
                         name = "Android",

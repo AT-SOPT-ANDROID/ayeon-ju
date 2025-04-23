@@ -13,7 +13,31 @@
         android:theme="@style/Theme.ATSOPTANDROID"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.signin.SignInScreen"
+            android:exported="false"
+            android:label="@string/title_activity_sign_in_screen"
+            android:theme="@style/Theme.ATSOPTANDROID" />
+        <activity
+            android:name=".ui.my.MyActivity"
+            android:exported="false"
+            android:label="@string/title_activity_my"
+            android:theme="@style/Theme.ATSOPTANDROID" />
+        <activity
+            android:name=".component.SignUpScreen"
+            android:exported="false"
+            android:label="@string/title_activity_sign_up_screen"
+            android:theme="@style/Theme.ATSOPTANDROID" />
+        <activity
+            android:name=".ui.signup.SignUpActivity"
+            android:exported="false"
+            android:label="@string/title_activity_sign_up"
+            android:theme="@style/Theme.ATSOPTANDROID" /> <!-- <activity -->
+        <!-- android:name=".MainActivity" -->
+        <!-- android:exported="false" -->
+        <!-- android:label="@string/title_activity_sign_in" -->
+        <!-- android:theme="@style/Theme.ATSOPTANDROID" /> -->
+        <activity
+            android:name=".ui.signin.SignInActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.ATSOPTANDROID">
