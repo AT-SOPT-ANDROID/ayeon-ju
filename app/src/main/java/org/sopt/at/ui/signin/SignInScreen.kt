@@ -49,6 +49,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
 import org.sopt.at.R
+import org.sopt.at.ui.home.HomeActivity
+import org.sopt.at.ui.home.HomeScreen
 import org.sopt.at.ui.my.MyActivity
 import org.sopt.at.ui.signup.SignUpActivity
 
@@ -205,7 +207,12 @@ fun SignInScreen(
                                 putExtra("id", idText)
                             }
 
-                            context.startActivity(intent)
+                            val homeIntent = Intent(context, HomeActivity::class.java).apply {
+                                putExtra("id", idText)
+                            }
+
+                            context.startActivity(homeIntent)
+
                         } else {
                             coroutineScope.launch {
                                 snackBarHostState.showSnackbar("아이디 또는 비밀번호가 일치하지 않습니다")
