@@ -17,11 +17,11 @@ class SignUpViewModel : ViewModel() {
         isPasswordVisible = !isPasswordVisible
     }
 
-    fun validateId() : Boolean{
+    fun validateId(): Boolean {
         return id.matches(Regex("^[a-z0-9]{6,12}$"))
     }
 
-    fun validatePassword() : Boolean{
+    fun validatePassword(): Boolean {
         return password.matches(Regex("^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[@\$!%*?&])[A-Za-z\\d@\$!%*?&]{8,12}$"))
     }
 
@@ -29,7 +29,6 @@ class SignUpViewModel : ViewModel() {
         isIdScreen = false
 
     }
-
 
 
 }

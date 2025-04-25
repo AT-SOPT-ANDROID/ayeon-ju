@@ -31,6 +31,7 @@ import org.sopt.at.ui.home.HomeScreen
 import org.sopt.at.ui.live.LiveScreen
 import org.sopt.at.ui.search.SearchScreen
 import org.sopt.at.ui.shorts.ShortsScreen
+import org.sopt.at.ui.signin.SignInViewModel
 
 
 @Composable
@@ -47,16 +48,16 @@ fun BottomNavBar() {
 
             )
         }
-    ) { innerPadding->
+    ) { innerPadding ->
 
 
-            BottomNavHost(
-                modifier = Modifier.padding(innerPadding),
-                navController = navController,
-                startDestination = BottomNavItem.Home.title
+        BottomNavHost(
+            modifier = Modifier.padding(innerPadding),
+            navController = navController,
+            startDestination = BottomNavItem.Home.title,
+
             )
-        }
-
+    }
 
 
 }
@@ -64,10 +65,6 @@ fun BottomNavBar() {
 
 @Composable
 private fun BottomNavigation(
-//    modifier: Modifier = Modifier,
-//    containerColor : Color,
-//    contentColor: Color,
-//    indicatorColor: Color,
     navController: NavController
 ) {
 
@@ -82,67 +79,66 @@ private fun BottomNavigation(
     )
 
 
-        NavigationBar(
-            containerColor = Color.Black,
-            contentColor = Color.DarkGray
-        ) {
-            items.forEach { item ->
-                val isSelected = currentRoute == item.route
-                NavigationBarItem(
-                    selected = isSelected,
-                    label = {
-                        Text(
-                            text = item.title,
-                            style = TextStyle(
-                                fontSize = 12.sp
-                            )
+    NavigationBar(
+        containerColor = Color.Black,
+        contentColor = Color.DarkGray
+    ) {
+        items.forEach { item ->
+            val isSelected = currentRoute == item.route
+            NavigationBarItem(
+                selected = isSelected,
+                label = {
+                    Text(
+                        text = item.title,
+                        style = TextStyle(
+                            fontSize = 12.sp
                         )
-                    },
-                    icon = {
-                        Icon(
-                            painter = painterResource(id = item.icon),
-                            contentDescription = item.title
-                        )
+                    )
+                },
+                icon = {
+                    Icon(
+                        painter = painterResource(id = item.icon),
+                        contentDescription = item.title
+                    )
 
-                    },
-                    colors = NavigationBarItemDefaults.colors(
-                        selectedIconColor = Color.White,
-                        unselectedIconColor = Color.DarkGray,
-                        selectedTextColor = Color.White,
-                        unselectedTextColor = Color.DarkGray,
-                        indicatorColor = Color.Transparent
+                },
+                colors = NavigationBarItemDefaults.colors(
+                    selectedIconColor = Color.White,
+                    unselectedIconColor = Color.DarkGray,
+                    selectedTextColor = Color.White,
+                    unselectedTextColor = Color.DarkGray,
+                    indicatorColor = Color.Transparent
 
-                    ),
-                    onClick =  {
-                        if (!isSelected) {
+                ),
+                onClick = {
+                    if (!isSelected) {
 
-                            navController.navigate(item.route) {
-                                navController.graph.startDestinationRoute?.let {
-                                    popUpTo(it) {saveState = true}
-                                }
-
-                                launchSingleTop = true
-                                restoreState = true
+                        navController.navigate(item.route) {
+                            navController.graph.startDestinationRoute?.let {
+                                popUpTo(it) { saveState = true }
                             }
 
+                            launchSingleTop = true
+                            restoreState = true
                         }
 
                     }
-                )
 
-            }
+                }
+            )
+
         }
     }
-
-
+}
 
 
 @Composable
 private fun BottomNavHost(
     modifier: Modifier = Modifier,
     navController: NavHostController,
-    startDestination: String
-) {
+    startDestination: String,
+
+    ) {
     NavHost(
         modifier = modifier,
         navController = navController,

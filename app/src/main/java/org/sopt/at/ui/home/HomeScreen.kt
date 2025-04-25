@@ -4,11 +4,8 @@ import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.clipScrollableContainer
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -28,24 +25,23 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.layout.ModifierLocalBeyondBoundsLayout
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.text.font.FontWeight.Companion.Medium
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.sopt.at.R
-import org.sopt.at.data.HomeOnAir
-import org.sopt.at.data.HomeRanking
+import org.sopt.at.data.AuthPreferences
+import org.sopt.at.data.home.HomeRanking
 import org.sopt.at.ui.my.MyActivity
+import org.sopt.at.ui.signin.SignInViewModel
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen(
+) {
 
     val banners = listOf(
         R.drawable.banner_1,
@@ -71,10 +67,10 @@ fun HomeScreen() {
         R.drawable.img_rank_7,
         R.drawable.img_rank_8,
 
-    )
+        )
 
     val rankBanners = rankImage.mapIndexed { index, resId ->
-        HomeRanking(imageRes = resId, rank = index+1)
+        HomeRanking(imageRes = resId, rank = index + 1)
     }
 
     val onAirImage = listOf(
@@ -86,12 +82,20 @@ fun HomeScreen() {
 
     val context = LocalContext.current
 
+    val viewModel = SignInViewModel(authPreferences = AuthPreferences(context))
+
+    val userId = viewModel.getUserId()
 
 
-    LazyColumn(modifier = Modifier
-        .fillMaxSize()
-        .background(Color.Black)
-        .padding(vertical = 16.dp))
+
+
+
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Black)
+            .padding(vertical = 16.dp)
+    )
     {
 
         item {
@@ -119,23 +123,23 @@ fun HomeScreen() {
                         tint = Color.White,
                         contentDescription = null,
 
-                    )
+                        )
 
                     Icon(
                         painter = painterResource(id = R.drawable.ic_history),
                         tint = Color.White,
                         contentDescription = "Profile Icon",
-                        modifier = Modifier.height(24.dp)
+                        modifier = Modifier
+                            .height(24.dp)
                             .clickable {
 
 
                                 val intent = Intent(context, MyActivity::class.java).apply {
-                                    //putExtra("id", idText)
+                                    putExtra("id", userId)
                                 }
                                 context.startActivity(intent)
                             }
                     )
-
 
 
                 }
@@ -230,7 +234,7 @@ fun HomeScreen() {
                     fontWeight = Medium,
                     fontSize = 14.sp,
                     modifier = Modifier
-                        .clickable {  }
+                        .clickable { }
                 )
             }
 
@@ -279,7 +283,7 @@ fun BannerItem(imageRes: Int) {
 }
 
 @Composable
-fun RankingItem(rank : HomeRanking) {
+fun RankingItem(rank: HomeRanking) {
 
     Row(
         verticalAlignment = Alignment.Bottom
@@ -293,7 +297,7 @@ fun RankingItem(rank : HomeRanking) {
             fontStyle = FontStyle.Italic,
 
 
-        )
+            )
 
         Spacer(modifier = Modifier.height(4.dp))
 
@@ -312,7 +316,7 @@ fun RankingItem(rank : HomeRanking) {
 
 
 @Composable
-fun OnAirItem(poster : Int) {
+fun OnAirItem(poster: Int) {
 
     Image(
         painter = painterResource(id = poster),
@@ -320,18 +324,10 @@ fun OnAirItem(poster : Int) {
         contentScale = ContentScale.Crop,
         modifier = Modifier
             .height(180.dp)
-            .aspectRatio(2f/3f)
+            .aspectRatio(2f / 3f)
             .clip(RoundedCornerShape(8.dp))
     )
 
 }
 
 
-
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-
-    HomeScreen()
-}

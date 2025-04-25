@@ -1,4 +1,4 @@
-package org.sopt.at.data
+package org.sopt.at.data.home
 
 data class HomeRanking(
     val imageRes: Int,
