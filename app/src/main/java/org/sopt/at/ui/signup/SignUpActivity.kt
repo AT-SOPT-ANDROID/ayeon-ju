@@ -23,6 +23,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import org.sopt.at.R
+import org.sopt.at.data.AuthPreferences
 import org.sopt.at.ui.signin.SignInActivity
 import org.sopt.at.ui.theme.ATSOPTANDROIDTheme
 
@@ -31,7 +32,12 @@ class SignUpActivity : ComponentActivity() {
     private val viewModel: SignUpViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
+
+        val authPreferences = AuthPreferences(this)
+
+
         enableEdgeToEdge()
         setContent {
             ATSOPTANDROIDTheme {
@@ -40,6 +46,11 @@ class SignUpActivity : ComponentActivity() {
                 SignUpScreen(
                     viewModel = viewModel,
                     onSignUpComplete = {
+
+                        authPreferences.saveAuthPreference(
+                            viewModel.id,
+                            viewModel.password
+                        )
 
                         val intent = Intent().apply {
                             putExtra("id", viewModel.id)
