@@ -28,6 +28,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -47,8 +48,12 @@ import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.launch
 import org.sopt.at.R
+import org.sopt.at.data.AuthPreferences
 import org.sopt.at.ui.home.HomeActivity
 import org.sopt.at.ui.home.HomeScreen
 import org.sopt.at.ui.my.MyActivity
@@ -68,7 +73,11 @@ fun SignInScreen(
     var signupId by rememberSaveable { mutableStateOf(idText) }
     var signupPassword by rememberSaveable { mutableStateOf(passwordText) }
 
+
     val context = LocalContext.current
+    val viewModel = remember { SignInViewModel(AuthPreferences(context)) }
+
+
     val coroutineScope = rememberCoroutineScope()
 
     val resultLauncher = rememberLauncherForActivityResult(
@@ -84,9 +93,14 @@ fun SignInScreen(
 
             signupId = idText
             signupPassword = passwordText
+
+            viewModel.saveUserInfo(signupId, signupPassword)
+
+
         }
 
     }
+
 
 
 
@@ -201,17 +215,19 @@ fun SignInScreen(
 
                 Button(
                     onClick = {
-                        if (idText == signupId && passwordText == signupPassword) {
 
-                            val intent = Intent(context, MyActivity::class.java).apply {
-                                putExtra("id", idText)
-                            }
+                        val userId = viewModel.getUserId()
+                        val userPassword = viewModel.getUserPassword()
+
+                        if (idText == userId && passwordText == userPassword) {
+
 
                             val homeIntent = Intent(context, HomeActivity::class.java).apply {
                                 putExtra("id", idText)
                             }
 
                             context.startActivity(homeIntent)
+
 
                         } else {
                             coroutineScope.launch {
