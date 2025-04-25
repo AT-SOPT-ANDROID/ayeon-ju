@@ -6,7 +6,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -41,33 +43,31 @@ fun BottomNavBar() {
         bottomBar = {
             BottomNavigation(
 
-                containerColor = Color.Black,
-                contentColor = Color.DarkGray,
-                indicatorColor = Color.Transparent,
                 navController = navController
 
             )
         }
-    ) {
-        Box(modifier = Modifier.padding(it)) {
+    ) { innerPadding->
+
 
             BottomNavHost(
+                modifier = Modifier.padding(innerPadding),
                 navController = navController,
                 startDestination = BottomNavItem.Home.title
             )
         }
 
-    }
+
 
 }
 
 
 @Composable
 private fun BottomNavigation(
-    modifier: Modifier = Modifier,
-    containerColor : Color,
-    contentColor: Color,
-    indicatorColor: Color,
+//    modifier: Modifier = Modifier,
+//    containerColor : Color,
+//    contentColor: Color,
+//    indicatorColor: Color,
     navController: NavController
 ) {
 
@@ -81,17 +81,15 @@ private fun BottomNavigation(
         BottomNavItem.History
     )
 
-    AnimatedVisibility(
-        visible = items.map { it.route }.contains(currentRoute)
-    ) {
+
         NavigationBar(
-            modifier = modifier,
-            containerColor = containerColor,
-            contentColor = contentColor
+            containerColor = Color.Black,
+            contentColor = Color.DarkGray
         ) {
             items.forEach { item ->
+                val isSelected = currentRoute == item.route
                 NavigationBarItem(
-                    selected = currentRoute == item.route,
+                    selected = isSelected,
                     label = {
                         Text(
                             text = item.title,
@@ -107,15 +105,28 @@ private fun BottomNavigation(
                         )
 
                     },
+                    colors = NavigationBarItemDefaults.colors(
+                        selectedIconColor = Color.White,
+                        unselectedIconColor = Color.DarkGray,
+                        selectedTextColor = Color.White,
+                        unselectedTextColor = Color.DarkGray,
+                        indicatorColor = Color.Transparent
+
+                    ),
                     onClick =  {
-                        navController.navigate(item.route) {
-                            navController.graph.startDestinationRoute?.let {
-                                //popUpTo(it) {saveState = true}
+                        if (!isSelected) {
+
+                            navController.navigate(item.route) {
+                                navController.graph.startDestinationRoute?.let {
+                                    popUpTo(it) {saveState = true}
+                                }
+
+                                launchSingleTop = true
+                                restoreState = true
                             }
 
-                            launchSingleTop = true
-                            restoreState = true
                         }
+
                     }
                 )
 
@@ -123,7 +134,7 @@ private fun BottomNavigation(
         }
     }
 
-}
+
 
 
 @Composable

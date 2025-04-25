@@ -12,11 +12,11 @@ sealed class BottomNavItem(
 
 ) {
 
-    data object Home : BottomNavItem("Home", R.drawable.ic_password_visible, "Home")
-    data object Shorts : BottomNavItem("Shorts", R.drawable.ic_password_invisible, "Shorts")
-    data object Live: BottomNavItem("Live", R.drawable.ic_password_visible, "Live")
-    data object Search: BottomNavItem("Search", R.drawable.ic_password_invisible, "Search")
-    data object History: BottomNavItem("History", R.drawable.ic_password_visible, "History")
+    data object Home : BottomNavItem("Home", R.drawable.ic_home, "Home")
+    data object Shorts : BottomNavItem("Shorts", R.drawable.ic_shorts, "Shorts")
+    data object Live: BottomNavItem("Live", R.drawable.ic_live, "Live")
+    data object Search: BottomNavItem("Search", R.drawable.ic_search, "Search")
+    data object History: BottomNavItem("History", R.drawable.ic_history, "History")
 
 
 }
