@@ -24,4 +24,17 @@ class AuthPreferences(context: Context) {
         prefs.edit() { clear() }
 
     }
+
+    fun saveAuthPreference(id: String, password: String) {
+        prefs.edit() {
+            putString("userId", id)
+                .putString("userPassword", password)
+        }
+    }
+
+    fun getUserId(): String? = prefs.getString("userId", null)
+
+    fun getUserPassword(): String? = prefs.getString("userPassword", null)
+
+
 }
