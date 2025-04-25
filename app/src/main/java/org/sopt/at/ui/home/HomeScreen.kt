@@ -1,5 +1,6 @@
 package org.sopt.at.ui.home
 
+import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -20,14 +21,17 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.ModifierLocalBeyondBoundsLayout
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
@@ -38,6 +42,7 @@ import androidx.compose.ui.unit.sp
 import org.sopt.at.R
 import org.sopt.at.data.HomeOnAir
 import org.sopt.at.data.HomeRanking
+import org.sopt.at.ui.my.MyActivity
 
 @Composable
 fun HomeScreen() {
@@ -49,6 +54,14 @@ fun HomeScreen() {
     )
 
     val rankImage = listOf(
+        R.drawable.img_rank_1,
+        R.drawable.img_rank_2,
+        R.drawable.img_rank_3,
+        R.drawable.img_rank_4,
+        R.drawable.img_rank_5,
+        R.drawable.img_rank_6,
+        R.drawable.img_rank_7,
+        R.drawable.img_rank_8,
         R.drawable.img_rank_1,
         R.drawable.img_rank_2,
         R.drawable.img_rank_3,
@@ -71,6 +84,8 @@ fun HomeScreen() {
         R.drawable.img_rank_5
     )
 
+    val context = LocalContext.current
+
 
 
     LazyColumn(modifier = Modifier
@@ -81,13 +96,50 @@ fun HomeScreen() {
 
         item {
 
-            Text(
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 8.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.img_tving_logo),
+                    contentDescription = "Tving logo",
+                    modifier = Modifier.height(24.dp)
+                )
 
-                text = "TVING",
-                color = Color.Red,
-                fontWeight = Bold,
-                fontSize = 24.sp
-            )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_cast),
+                        tint = Color.White,
+                        contentDescription = null,
+
+                    )
+
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_history),
+                        tint = Color.White,
+                        contentDescription = "Profile Icon",
+                        modifier = Modifier.height(24.dp)
+                            .clickable {
+
+
+                                val intent = Intent(context, MyActivity::class.java).apply {
+                                    //putExtra("id", idText)
+                                }
+                                context.startActivity(intent)
+                            }
+                    )
+
+
+
+                }
+            }
 
         }
 
@@ -200,23 +252,6 @@ fun HomeScreen() {
 
             }
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     }
 }
