@@ -1,12 +1,8 @@
-package org.sopt.at.ui.component
+package org.sopt.at.ui.component.navigation
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
@@ -15,23 +11,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.NavDestination
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import org.sopt.at.ui.history.HistoryScreen
-import org.sopt.at.ui.home.HomeScreen
-import org.sopt.at.ui.live.LiveScreen
-import org.sopt.at.ui.search.SearchScreen
-import org.sopt.at.ui.shorts.ShortsScreen
-import org.sopt.at.ui.signin.SignInViewModel
 
 
 @Composable
@@ -97,7 +83,7 @@ private fun BottomNavigation(
                 },
                 icon = {
                     Icon(
-                        painter = painterResource(id = item.icon),
+                        imageVector = ImageVector.vectorResource(id = item.icon),
                         contentDescription = item.title
                     )
 
@@ -111,46 +97,15 @@ private fun BottomNavigation(
 
                 ),
                 onClick = {
-                    if (!isSelected) {
-
-                        navController.navigate(item.route) {
-                            navController.graph.startDestinationRoute?.let {
-                                popUpTo(it) { saveState = true }
-                            }
-
-                            launchSingleTop = true
-                            restoreState = true
-                        }
-
-                    }
-
+                    navController.navigateBottomTab(item.route)
                 }
             )
-
         }
     }
 }
 
 
-@Composable
-private fun BottomNavHost(
-    modifier: Modifier = Modifier,
-    navController: NavHostController,
-    startDestination: String,
 
-    ) {
-    NavHost(
-        modifier = modifier,
-        navController = navController,
-        startDestination = startDestination
-    ) {
-        composable(BottomNavItem.Home.route) { HomeScreen() }
-        composable(BottomNavItem.Shorts.route) { ShortsScreen() }
-        composable(BottomNavItem.Live.route) { LiveScreen() }
-        composable(BottomNavItem.Search.route) { SearchScreen() }
-        composable(BottomNavItem.History.route) { HistoryScreen() }
-    }
-}
 
 
 
