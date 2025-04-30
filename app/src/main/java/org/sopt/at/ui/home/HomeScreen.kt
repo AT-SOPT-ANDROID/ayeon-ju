@@ -40,6 +40,7 @@ import androidx.compose.ui.unit.sp
 import org.sopt.at.R
 import org.sopt.at.data.AuthPreferences
 import org.sopt.at.data.home.HomeRanking
+import org.sopt.at.ui.component.TvingHomeTopBar
 import org.sopt.at.ui.my.MyActivity
 import org.sopt.at.ui.signin.SignInViewModel
 
@@ -60,8 +61,6 @@ fun HomeScreen(
 
 
 
-
-
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
@@ -71,50 +70,7 @@ fun HomeScreen(
 
         item {
 
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 8.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Image(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.img_tving_logo),
-                    contentDescription = "Tving logo",
-                    modifier = Modifier.height(24.dp)
-                )
-
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
-
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_cast),
-                        tint = Color.White,
-                        contentDescription = null,
-
-                        )
-
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_history),
-                        tint = Color.White,
-                        contentDescription = "Profile Icon",
-                        modifier = Modifier
-                            .height(24.dp)
-                            .clickable {
-
-
-                                val intent = Intent(context, MyActivity::class.java).apply {
-                                    putExtra("id", userId)
-                                }
-                                context.startActivity(intent)
-                            }
-                    )
-
-
-                }
-            }
+            TvingHomeTopBar()
 
         }
 
