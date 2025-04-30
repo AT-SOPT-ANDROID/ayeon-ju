@@ -21,13 +21,17 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.text.font.FontWeight.Companion.Medium
@@ -41,44 +45,12 @@ import org.sopt.at.ui.signin.SignInViewModel
 
 @Composable
 fun HomeScreen(
+    viewModel: HomeViewModel
 ) {
 
-    val banners = listOf(
-        R.drawable.banner_1,
-        R.drawable.banner_2,
-        R.drawable.banner_3
-    )
+    val state by viewModel.state.collectAsState()
 
-    val rankImage = listOf(
-        R.drawable.img_rank_1,
-        R.drawable.img_rank_2,
-        R.drawable.img_rank_3,
-        R.drawable.img_rank_4,
-        R.drawable.img_rank_5,
-        R.drawable.img_rank_6,
-        R.drawable.img_rank_7,
-        R.drawable.img_rank_8,
-        R.drawable.img_rank_1,
-        R.drawable.img_rank_2,
-        R.drawable.img_rank_3,
-        R.drawable.img_rank_4,
-        R.drawable.img_rank_5,
-        R.drawable.img_rank_6,
-        R.drawable.img_rank_7,
-        R.drawable.img_rank_8,
 
-        )
-
-    val rankBanners = rankImage.mapIndexed { index, resId ->
-        HomeRanking(imageRes = resId, rank = index + 1)
-    }
-
-    val onAirImage = listOf(
-        R.drawable.img_rank_8,
-        R.drawable.img_rank_7,
-        R.drawable.img_rank_6,
-        R.drawable.img_rank_5
-    )
 
     val context = LocalContext.current
 
@@ -95,8 +67,7 @@ fun HomeScreen(
             .fillMaxSize()
             .background(Color.Black)
             .padding(vertical = 16.dp)
-    )
-    {
+    ) {
 
         item {
 
@@ -108,7 +79,7 @@ fun HomeScreen(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.img_tving_logo),
+                    imageVector = ImageVector.vectorResource(id = R.drawable.img_tving_logo),
                     contentDescription = "Tving logo",
                     modifier = Modifier.height(24.dp)
                 )
@@ -160,7 +131,7 @@ fun HomeScreen(
                 horizontalArrangement = Arrangement.spacedBy(5.dp)
             ) {
 
-                items(banners) { banner ->
+                items(state.mainBanners) { banner ->
                     BannerItem(imageRes = banner)
                 }
 
@@ -195,7 +166,7 @@ fun HomeScreen(
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
 
-                items(rankBanners) { item ->
+                items(state.rankBanners) { item ->
 
                     RankingItem(rank = item)
 
@@ -247,7 +218,7 @@ fun HomeScreen(
             ) {
 
 
-                items(onAirImage) { item ->
+                items(state.onAirImages) { item ->
 
                     OnAirItem(poster = item)
 
@@ -271,7 +242,7 @@ fun BannerItem(imageRes: Int) {
     ) {
         Image(
             painter = painterResource(id = imageRes),
-            contentDescription = null,
+            contentDescription = "홈 배너",
             modifier = Modifier
                 .fillMaxWidth()
                 .aspectRatio(4f / 5f),

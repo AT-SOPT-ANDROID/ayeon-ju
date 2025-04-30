@@ -5,5 +5,5 @@ import androidx.navigation.compose.composable
 
 fun NavGraphBuilder.homeNavigation() {
 
-    composable("home") { HomeScreen() }
+    composable("home") { HomeScreen(viewModel = HomeViewModel()) }
 }
