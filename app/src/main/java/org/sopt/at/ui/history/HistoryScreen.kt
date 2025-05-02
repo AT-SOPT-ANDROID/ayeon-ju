@@ -12,7 +12,7 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun HistoryScreen() {
 
-    Text("History")
+
 
     Box(
         modifier = Modifier

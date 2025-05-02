@@ -12,7 +12,6 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun SearchScreen() {
 
-    Text("Search")
 
     Box(
         modifier = Modifier

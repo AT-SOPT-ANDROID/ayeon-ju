@@ -12,7 +12,7 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun LiveScreen() {
 
-    Text("Live")
+
 
     Box(
         modifier = Modifier

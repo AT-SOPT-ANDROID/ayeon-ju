@@ -12,7 +12,7 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun ShortsScreen() {
 
-    Text("Shorts")
+
 
     Box(
         modifier = Modifier
