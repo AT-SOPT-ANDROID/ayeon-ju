@@ -2,6 +2,12 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.hilt.android)
+    alias(libs.plugins.ksp)
+
+
+
+
 }
 
 android {
@@ -57,6 +63,16 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-    implementation("androidx.navigation:navigation-compose:2.8.9")
-    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
+
+
+    implementation(libs.hilt.android)
+    implementation(libs.hilt.navigation.compose)
+
+    ksp(libs.hilt.compiler)
+
+    implementation("com.google.dagger:hilt-android:2.48")
+    ksp("com.google.dagger:hilt-compiler:2.48")
+
+
+
 }
