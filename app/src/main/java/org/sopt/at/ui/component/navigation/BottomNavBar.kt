@@ -40,7 +40,7 @@ fun BottomNavBar() {
         BottomNavHost(
             modifier = Modifier.padding(innerPadding),
             navController = navController,
-            startDestination = BottomNavItem.Home.title,
+            startDestination = BottomNavItem.Home.route,
 
             )
     }

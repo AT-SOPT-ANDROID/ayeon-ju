@@ -19,3 +19,10 @@ sealed class BottomNavItem(
 
 
 }
+
+
+sealed class AuthNavItem(val route: String) {
+    data object SignUp : AuthNavItem("sign_up")
+    data object SignIn : AuthNavItem("sign_in")
+    data object My : AuthNavItem("my")
+}
