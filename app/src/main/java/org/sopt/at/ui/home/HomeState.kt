@@ -1,6 +1,5 @@
 package org.sopt.at.ui.home
 
-import org.sopt.at.data.home.HomeOnAir
 import org.sopt.at.data.home.HomeRanking
 
 data class HomeState(

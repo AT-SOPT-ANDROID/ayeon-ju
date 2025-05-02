@@ -1,6 +1,5 @@
 package org.sopt.at.ui.home
 
-import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -18,7 +17,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Icon
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -27,22 +26,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.text.font.FontWeight.Companion.Medium
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import org.sopt.at.R
-import org.sopt.at.data.AuthPreferences
 import org.sopt.at.data.home.HomeRanking
 import org.sopt.at.ui.component.TvingHomeTopBar
-import org.sopt.at.ui.my.MyActivity
-import org.sopt.at.ui.signin.SignInViewModel
 
 @Composable
 fun HomeScreen(
@@ -52,138 +45,131 @@ fun HomeScreen(
     val state by viewModel.state.collectAsState()
 
 
-
     val context = LocalContext.current
 
-    val viewModel = SignInViewModel(authPreferences = AuthPreferences(context))
 
-    val userId = viewModel.getUserId()
+    Scaffold(
+        topBar = { TvingHomeTopBar() },
 
-
-
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.Black)
-            .padding(vertical = 16.dp)
-    ) {
-
-        item {
-
-            TvingHomeTopBar()
-
-        }
-
-        item {
-            Spacer(modifier = Modifier.height(16.dp))
-        }
+        ) { innerPadding ->
 
 
-        item {
-
-            LazyRow(
-
-                contentPadding = PaddingValues(horizontal = 5.dp),
-                horizontalArrangement = Arrangement.spacedBy(5.dp)
-            ) {
-
-                items(state.mainBanners) { banner ->
-                    BannerItem(imageRes = banner)
-                }
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Black)
+                .padding(innerPadding),
+            contentPadding = PaddingValues(vertical = 16.dp)
+        ) {
 
 
+            item {
+                Spacer(modifier = Modifier.height(16.dp))
             }
 
-        }
 
-        item {
-            Spacer(modifier = Modifier.height(26.dp))
-        }
+            item {
 
-        item {
+                LazyRow(
 
-            Text(
-                modifier = Modifier
-                    .padding(10.dp),
-                text = "오늘의 TVING TOP 20",
-                color = Color.White,
-                fontWeight = Bold,
-                fontSize = 14.sp
-            )
+                    contentPadding = PaddingValues(horizontal = 5.dp),
+                    horizontalArrangement = Arrangement.spacedBy(5.dp)
+                ) {
 
-        }
+                    items(state.mainBanners) { banner ->
+                        BannerItem(imageRes = banner)
+                    }
 
-
-
-        item {
-
-            LazyRow(
-                contentPadding = PaddingValues(horizontal = 16.dp),
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-
-                items(state.rankBanners) { item ->
-
-                    RankingItem(rank = item)
 
                 }
 
             }
 
-        }
+            item {
+                Spacer(modifier = Modifier.height(26.dp))
+            }
 
-        item {
-            Spacer(modifier = Modifier.height(26.dp))
-        }
-
-
-        item {
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(10.dp),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
+            item {
 
                 Text(
-
-                    text = "지금 방영 중인 콘텐츠",
+                    modifier = Modifier
+                        .padding(10.dp),
+                    text = "오늘의 TVING TOP 20",
                     color = Color.White,
                     fontWeight = Bold,
                     fontSize = 14.sp
                 )
 
-                Text(
-
-                    text = "더보기",
-                    color = Color.LightGray,
-                    fontWeight = Medium,
-                    fontSize = 14.sp,
-                    modifier = Modifier
-                        .clickable { }
-                )
             }
 
-        }
 
-        item {
-            LazyRow(
-                contentPadding = PaddingValues(horizontal = 16.dp),
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
+            item {
 
+                LazyRow(
+                    contentPadding = PaddingValues(horizontal = 16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
 
-                items(state.onAirImages) { item ->
+                    items(state.rankBanners) { item ->
 
-                    OnAirItem(poster = item)
+                        RankingItem(rank = item)
+
+                    }
 
                 }
 
+            }
+
+            item {
+                Spacer(modifier = Modifier.height(26.dp))
+            }
+
+
+            item {
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(10.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+
+                    Text(
+
+                        text = "지금 방영 중인 콘텐츠",
+                        color = Color.White,
+                        fontWeight = Bold,
+                        fontSize = 14.sp
+                    )
+
+                    Text(
+
+                        text = "더보기",
+                        color = Color.LightGray,
+                        fontWeight = Medium,
+                        fontSize = 14.sp,
+                        modifier = Modifier
+                            .clickable { }
+                    )
+                }
 
             }
-        }
 
+            item {
+                LazyRow(
+                    contentPadding = PaddingValues(horizontal = 16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+
+
+                    items(state.onAirImages) { item ->
+
+                        OnAirItem(poster = item)
+
+                    }
+                }
+            }
+        }
     }
 }
 

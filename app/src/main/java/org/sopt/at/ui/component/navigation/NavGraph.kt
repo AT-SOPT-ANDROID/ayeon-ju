@@ -12,19 +12,23 @@ import org.sopt.at.ui.shorts.shortsNavigation
 
 @Composable
 fun BottomNavHost(
-    modifier: Modifier = Modifier,
+    modifier: Modifier,
     navController: NavHostController,
-    startDestination: String = BottomNavItem.Home.route)
-{
+    startDestination: String = BottomNavItem.Home.route
+) {
     NavHost(
-        modifier = modifier,
+        modifier = Modifier,
+
         navController = navController,
         startDestination = startDestination
     ) {
+
         homeNavigation()
         shortsNavigation()
         liveNavigation()
         searchNavigation()
         historyNavigation()
     }
+
+
 }
