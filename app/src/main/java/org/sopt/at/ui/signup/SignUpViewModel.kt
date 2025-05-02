@@ -13,16 +13,24 @@ class SignUpViewModel : ViewModel() {
     var isPasswordVisible by mutableStateOf(false)
     var isIdScreen by mutableStateOf(true)
 
+    companion object {
+        private val idRegex = Regex("^[a-z0-9]{6,12}$")
+        private val passwordRegex = Regex("^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[@\$!%*?&])[A-Za-z\\d@\$!%*?&]{8,12}$")
+    }
+
+
+
+
     fun togglePasswordVisibility() {
         isPasswordVisible = !isPasswordVisible
     }
 
     fun validateId(): Boolean {
-        return id.matches(Regex("^[a-z0-9]{6,12}$"))
+        return id.matches(idRegex)
     }
 
     fun validatePassword(): Boolean {
-        return password.matches(Regex("^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[@\$!%*?&])[A-Za-z\\d@\$!%*?&]{8,12}$"))
+        return password.matches(passwordRegex)
     }
 
     fun onNextClick() {
