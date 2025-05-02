@@ -27,6 +27,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -44,7 +45,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import org.sopt.at.R
+import org.sopt.at.data.AuthPreferences
 import org.sopt.at.ui.component.SignUpTextField
 import org.sopt.at.ui.component.TvingBasicButton
 import org.sopt.at.ui.theme.ATSOPTANDROIDTheme
@@ -55,12 +60,21 @@ import kotlin.math.sin
 fun SignUpScreen(
 
 
-    viewModel: SignUpViewModel,
-    onSignUpComplete: () -> Unit
+    viewModel: SignUpViewModel = hiltViewModel(),
+    onSignUpSuccess:() -> Unit
 
 ) {
 
+    val userId by viewModel.userId.collectAsState()
+    val userPassword by viewModel.userPassword.collectAsState()
+
+    val isPasswordVisible by viewModel.isPasswordVisible.collectAsState()
+
+    val isIdScreen by viewModel.isIdScreen.collectAsState()
+
     val context = LocalContext.current
+
+    val authPreferences = remember { AuthPreferences(context) }
 
 
     Column(
@@ -77,7 +91,7 @@ fun SignUpScreen(
 
         Spacer(modifier = Modifier.padding(10.dp))
 
-        if (viewModel.isIdScreen) {
+        if (isIdScreen) {
 
             Column(
                 modifier = Modifier
@@ -98,8 +112,8 @@ fun SignUpScreen(
                 Spacer(modifier = Modifier.padding(10.dp))
 
                 SignUpTextField(
-                    value = viewModel.id,
-                    onValueChange = { viewModel.id = it },
+                    value = userId,
+                    onValueChange = viewModel::updateId,
                     label = "아이디",
                     onPasswordVisibilityToggle = {},
                     isPasswordField = false,
@@ -163,16 +177,16 @@ fun SignUpScreen(
 
 
                 SignUpTextField(
-                    value = viewModel.password,
-                    onValueChange = { viewModel.password = it },
+                    value = userPassword,
+                    onValueChange = viewModel::updatePassword,
                     label = "비밀번호",
                     isPasswordField = true,
-                    isVisiblePassword = viewModel.isPasswordVisible,
+                    isVisiblePassword = isPasswordVisible,
                     onPasswordVisibilityToggle = { viewModel.togglePasswordVisibility() },
                     onNextClick = {},
                     trailingIcon = {
                         val icon =
-                            if (viewModel.isPasswordVisible) R.drawable.ic_password_visible else R.drawable.ic_password_invisible
+                            if (isPasswordVisible) R.drawable.ic_password_visible else R.drawable.ic_password_invisible
                         IconButton(onClick = { viewModel.togglePasswordVisibility() }) {
                             Icon(painter = painterResource(icon), contentDescription = "비밀번호 보기")
                         }
@@ -199,7 +213,8 @@ fun SignUpScreen(
                 text = "다음",
                 onClick = {
                     if (viewModel.validatePassword()) {
-                        onSignUpComplete()
+                        authPreferences.saveAuthPreference(userId, userPassword)
+                        onSignUpSuccess()
                     } else {
                         Toast.makeText(
                             context,
@@ -218,14 +233,14 @@ fun SignUpScreen(
 
 }
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview4() {
-    ATSOPTANDROIDTheme {
-
-        SignUpScreen(
-            SignUpViewModel(), {})
-
-
-    }
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun GreetingPreview4() {
+//    ATSOPTANDROIDTheme {
+//
+//        SignUpScreen(
+//            SignUpViewModel(), {})
+//
+//
+//    }
+//}

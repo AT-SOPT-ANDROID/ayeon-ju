@@ -9,62 +9,53 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavHost
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import dagger.hilt.android.AndroidEntryPoint
 import org.sopt.at.data.AuthPreferences
-import org.sopt.at.ui.my.MyActivity
-import org.sopt.at.ui.signin.SignInActivity
+import org.sopt.at.ui.component.navigation.AuthNavItem
+import org.sopt.at.ui.component.navigation.MainNavHost
+import org.sopt.at.ui.home.HomeScreen
+import org.sopt.at.ui.signin.SignInScreen
+import org.sopt.at.ui.signup.SignUpScreen
 import org.sopt.at.ui.theme.ATSOPTANDROIDTheme
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+
+
+            val authPreferences = AuthPreferences(this)
+            val isLoggedIn = authPreferences.isLoggedIn()
+
+
+
             ATSOPTANDROIDTheme {
 
-//                val sharedPref = getSharedPreferences("auth", Context.MODE_PRIVATE)
-//                val isLoggedIn = sharedPref.getBoolean("isLoggedIn", false)
 
-                val authPrefs = AuthPreferences(this)
-                val isLoggedIn = authPrefs.isLoggedIn()
+                    MainNavHost(startDestination = if (isLoggedIn) "main" else AuthNavItem.SignIn.route)
 
 
-                val intent = if (isLoggedIn) {
-                    Intent(this, MyActivity::class.java)
-                } else {
-                    Intent(this, SignInActivity::class.java)
-                }
 
-                startActivity(intent)
-                finish()
 
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+
             }
         }
     }
 }
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    ATSOPTANDROIDTheme {
-        Greeting("Android")
-    }
-}
+

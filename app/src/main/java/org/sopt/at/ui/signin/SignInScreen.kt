@@ -2,6 +2,7 @@ package org.sopt.at.ui.signin
 
 import android.app.Activity
 import android.content.Intent
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
@@ -28,6 +29,8 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -47,44 +50,40 @@ import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import org.sopt.at.R
-import org.sopt.at.ui.my.MyActivity
-import org.sopt.at.ui.signup.SignUpActivity
+import org.sopt.at.data.AuthPreferences
+import org.sopt.at.ui.home.HomeScreen
+import kotlin.jvm.java
 
 
 @Composable
 fun SignInScreen(
-    modifier: Modifier = Modifier,
-    snackBarHostState: SnackbarHostState
+
+    viewModel: SignInViewModel = hiltViewModel(),
+    onSignSuccess: () -> Unit,
+    onNavigateToSignUp:() -> Unit
+
 ) {
 
-    var idText by remember { mutableStateOf("") }
-    var passwordText by remember { mutableStateOf("") }
+
+
+
+    val userId by viewModel.userId.collectAsState()
+    val userPassword by viewModel.userPassword.collectAsState()
     var isVisiblePassword by remember { mutableStateOf(false) }
-
-    var signupId by rememberSaveable { mutableStateOf(idText) }
-    var signupPassword by rememberSaveable { mutableStateOf(passwordText) }
-
     val context = LocalContext.current
+
     val coroutineScope = rememberCoroutineScope()
 
-    val resultLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.StartActivityForResult()
-    ) { result ->
+    val snackBarHostState = remember { SnackbarHostState() }
 
-        if (result.resultCode == Activity.RESULT_OK) {
-            val data = result.data
-            idText = data?.getStringExtra("id") ?: ""
-            passwordText = data?.getStringExtra("password") ?: ""
-
-
-
-            signupId = idText
-            signupPassword = passwordText
-        }
-
-    }
 
 
 
@@ -122,8 +121,8 @@ fun SignInScreen(
                 Spacer(modifier = Modifier.padding(10.dp))
 
                 TextField(
-                    value = idText,
-                    onValueChange = { idText = it },
+                    value = userId,
+                    onValueChange = viewModel::updateId,
                     singleLine = true,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -151,8 +150,8 @@ fun SignInScreen(
                 Spacer(modifier = Modifier.padding(5.dp))
 
                 TextField(
-                    value = passwordText,
-                    onValueChange = { passwordText = it },
+                    value = userPassword,
+                    onValueChange = viewModel::updatePassword,
                     singleLine = true,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -199,16 +198,14 @@ fun SignInScreen(
 
                 Button(
                     onClick = {
-                        if (idText == signupId && passwordText == signupPassword) {
 
-                            val intent = Intent(context, MyActivity::class.java).apply {
-                                putExtra("id", idText)
-                            }
 
-                            context.startActivity(intent)
-                        } else {
+                        if (viewModel.isValidUser()) {
+                            viewModel.login()
+                            onSignSuccess()
+                        } else{
                             coroutineScope.launch {
-                                snackBarHostState.showSnackbar("아이디 또는 비밀번호가 일치하지 않습니다")
+                                snackBarHostState.showSnackbar("아이디 또는 비밀번호가 일치하지 않습니다.")
                             }
                         }
 
@@ -267,13 +264,7 @@ fun SignInScreen(
                         fontSize = 12.sp,
                         modifier = Modifier
                             .clickable {
-
-                                resultLauncher.launch(
-                                    Intent(
-                                        context,
-                                        SignUpActivity::class.java
-                                    )
-                                )
+                                onNavigateToSignUp()
                             }
                     )
                 }
