@@ -58,8 +58,8 @@ import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import org.sopt.at.R
-import org.sopt.at.data.AuthPreferences
 import org.sopt.at.ui.home.HomeScreen
+import org.sopt.at.ui.theme.ATSOPTANDROIDTheme
 import kotlin.jvm.java
 
 
@@ -75,8 +75,10 @@ fun SignInScreen(
 
 
 
-    val userId by viewModel.userId.collectAsState()
-    val userPassword by viewModel.userPassword.collectAsState()
+    //val userId by viewModel.userId.collectAsState()
+    //val userPassword by viewModel.userPassword.collectAsState()
+
+    val state by viewModel.state.collectAsState()
     var isVisiblePassword by remember { mutableStateOf(false) }
     val context = LocalContext.current
 
@@ -121,7 +123,7 @@ fun SignInScreen(
                 Spacer(modifier = Modifier.padding(10.dp))
 
                 TextField(
-                    value = userId,
+                    value = state.id,
                     onValueChange = viewModel::updateId,
                     singleLine = true,
                     modifier = Modifier
@@ -141,7 +143,7 @@ fun SignInScreen(
                         Text(
                             "아이디",
                             textAlign = TextAlign.Center,
-                            color = Color.LightGray,
+                            color = ATSOPTANDROIDTheme.colors.basicBlack,
                             fontSize = 14.sp
                         )
                     }
@@ -150,7 +152,7 @@ fun SignInScreen(
                 Spacer(modifier = Modifier.padding(5.dp))
 
                 TextField(
-                    value = userPassword,
+                    value = state.password,
                     onValueChange = viewModel::updatePassword,
                     singleLine = true,
                     modifier = Modifier
@@ -199,14 +201,18 @@ fun SignInScreen(
                 Button(
                     onClick = {
 
+                        coroutineScope.launch {
 
-                        if (viewModel.isValidUser()) {
-                            viewModel.login()
-                            onSignSuccess()
-                        } else{
-                            coroutineScope.launch {
-                                snackBarHostState.showSnackbar("아이디 또는 비밀번호가 일치하지 않습니다.")
+
+                            if (viewModel.isValidUser()) {
+                                //viewModel.login()
+                                onSignSuccess()
+                            } else {
+                                coroutineScope.launch {
+                                    snackBarHostState.showSnackbar("아이디 또는 비밀번호가 일치하지 않습니다.")
+                                }
                             }
+
                         }
 
                     },
