@@ -5,15 +5,20 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+import org.sopt.at.domain.repository.UserRepository
 import javax.inject.Inject
 
 
 @HiltViewModel
-class SignUpViewModel @Inject constructor() : ViewModel() {
+class SignUpViewModel @Inject constructor(
+    private val userRepository: UserRepository
+) : ViewModel() {
 
 
     private val _userId = MutableStateFlow("")
@@ -22,8 +27,12 @@ class SignUpViewModel @Inject constructor() : ViewModel() {
     private val _userPassword = MutableStateFlow("")
     val userPassword: StateFlow<String> = _userPassword.asStateFlow()
 
+    private val _userNickname = MutableStateFlow("")
+    val userNickname: StateFlow<String> = _userNickname.asStateFlow()
+
     private val _isPasswordVisible = MutableStateFlow(false)
     val isPasswordVisible = _isPasswordVisible.asStateFlow()
+
 
     private val _isIdScreen = MutableStateFlow(true)
     val isIdScreen = _isIdScreen.asStateFlow()
@@ -34,12 +43,24 @@ class SignUpViewModel @Inject constructor() : ViewModel() {
         private val passwordRegex = Regex("^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[@\$!%*?&])[A-Za-z\\d@\$!%*?&]{8,12}$")
     }
 
+
+
     fun updateId(id : String) {
         _userId.value = id
     }
 
     fun updatePassword(password : String) {
         _userPassword.value = password
+    }
+
+    fun saveUserInfo() {
+        viewModelScope.launch {
+            userRepository.saveUserInfo(_userId.value, _userPassword.value)
+        }
+    }
+
+    fun updateNickname(nickname: String) {
+        _userNickname.value = nickname
     }
 
 

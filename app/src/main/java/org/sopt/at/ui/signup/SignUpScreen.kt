@@ -49,7 +49,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import org.sopt.at.R
-import org.sopt.at.data.AuthPreferences
 import org.sopt.at.ui.component.SignUpTextField
 import org.sopt.at.ui.component.TvingBasicButton
 import org.sopt.at.ui.theme.ATSOPTANDROIDTheme
@@ -65,6 +64,7 @@ fun SignUpScreen(
 
     val userId by viewModel.userId.collectAsState()
     val userPassword by viewModel.userPassword.collectAsState()
+    val userNickname by viewModel.userNickname.collectAsState()
 
     val isPasswordVisible by viewModel.isPasswordVisible.collectAsState()
 
@@ -72,7 +72,7 @@ fun SignUpScreen(
 
     val context = LocalContext.current
 
-    val authPreferences = remember { AuthPreferences(context) }
+    //val authPreferences = remember { AuthPreferences(context) }
 
 
     Column(
@@ -136,6 +136,7 @@ fun SignUpScreen(
                 text = "다음",
                 onClick = {
                     if (viewModel.validateId()) {
+
                         viewModel.onNextClick()
 
 
@@ -206,13 +207,15 @@ fun SignUpScreen(
             }
 
 
-
             TvingBasicButton(
                 text = "다음",
                 onClick = {
                     if (viewModel.validatePassword()) {
-                        authPreferences.saveAuthPreference(userId, userPassword)
+                        //authPreferences.saveAuthPreference(userId, userPassword)
+                        //onSignUpSuccess()
+                        viewModel.saveUserInfo()
                         onSignUpSuccess()
+
                     } else {
                         Toast.makeText(
                             context,
@@ -223,6 +226,33 @@ fun SignUpScreen(
                     }
                 },
               )
+
+
+            Spacer(modifier = Modifier.padding(10.dp))
+
+
+//            SignUpTextField(
+//                value = userNickname,
+//                onValueChange = viewModel::updateNickname,
+//                label = "닉네임",
+//                onPasswordVisibilityToggle = {},
+//                isPasswordField = false,
+//                isVisiblePassword = false,
+//                onNextClick = {},
+//                trailingIcon = null
+//
+//            )
+//
+//            Spacer(modifier = Modifier.padding(10.dp))
+//
+//            Text(
+//                text = "한글, 영어, 숫자 1~20자리",
+//                fontSize = 12.sp,
+//                color = ATSOPTANDROIDTheme.colors.gray04,
+//                modifier = Modifier.fillMaxWidth()
+//            )
+
+
         }
 
     }
