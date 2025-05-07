@@ -70,6 +70,8 @@ dependencies {
 
     ksp(libs.hilt.compiler)
 
+    implementation(libs.datastore.preferences)
+
 
 
 
