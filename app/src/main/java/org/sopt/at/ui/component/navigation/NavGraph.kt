@@ -18,7 +18,6 @@ fun BottomNavHost(
 ) {
     NavHost(
         modifier = Modifier,
-
         navController = navController,
         startDestination = startDestination
     ) {

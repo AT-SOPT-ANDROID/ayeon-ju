@@ -23,7 +23,6 @@ class AuthPreferences @Inject constructor(
     }
 
 
-
     fun saveAuthPreference(id: String, password: String) {
         prefs.edit() {
             putString("userId", id)

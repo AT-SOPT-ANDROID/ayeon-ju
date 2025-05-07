@@ -58,10 +58,8 @@ import kotlin.math.sin
 
 @Composable
 fun SignUpScreen(
-
-
     viewModel: SignUpViewModel = hiltViewModel(),
-    onSignUpSuccess:() -> Unit
+    onSignUpSuccess: () -> Unit
 
 ) {
 
@@ -224,23 +222,10 @@ fun SignUpScreen(
                         return@TvingBasicButton
                     }
                 },
-
-                )
+              )
         }
-
 
     }
 
 }
 
-//@Preview(showBackground = true)
-//@Composable
-//fun GreetingPreview4() {
-//    ATSOPTANDROIDTheme {
-//
-//        SignUpScreen(
-//            SignUpViewModel(), {})
-//
-//
-//    }
-//}
