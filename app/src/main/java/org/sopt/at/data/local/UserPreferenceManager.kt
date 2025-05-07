@@ -41,5 +41,13 @@ class UserPreferenceManager @Inject constructor(
         return context.dataStore.data.map { it[USER_PASSWORD] ?:"" }
     }
 
+    fun isLoggedIn(): Flow<Boolean> {
+        return context.dataStore.data.map { prefs ->
+            val id = prefs[USER_ID]
+            val password = prefs[USER_PASSWORD]
+            !id.isNullOrBlank() && !password.isNullOrBlank()
+        }
+    }
+
 
 }

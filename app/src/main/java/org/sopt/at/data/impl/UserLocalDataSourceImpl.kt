@@ -21,4 +21,8 @@ class UserLocalDataSourceImpl @Inject constructor(
     override fun getUserPassWord(): Flow<String> {
         return userPreferenceManager.getUserPassword()
     }
+
+    override suspend fun isLoggedIn(): Flow<Boolean> {
+        return userPreferenceManager.isLoggedIn()
+    }
 }
