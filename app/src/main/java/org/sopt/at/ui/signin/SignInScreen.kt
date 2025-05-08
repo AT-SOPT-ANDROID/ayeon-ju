@@ -73,11 +73,6 @@ fun SignInScreen(
 ) {
 
 
-
-
-    //val userId by viewModel.userId.collectAsState()
-    //val userPassword by viewModel.userPassword.collectAsState()
-
     val state by viewModel.state.collectAsState()
     var isVisiblePassword by remember { mutableStateOf(false) }
     val context = LocalContext.current
@@ -88,6 +83,21 @@ fun SignInScreen(
 
 
 
+
+    LaunchedEffect(Unit) {
+
+        viewModel.signInResult.collect { isSuccess ->
+
+            if (isSuccess) {
+                onSignSuccess()
+                Toast.makeText(context, "로그인 성공!", Toast.LENGTH_SHORT).show()
+            } else {
+                snackBarHostState.showSnackbar("로그인 실패")
+            }
+
+        }
+
+    }
 
     Column(
         modifier = Modifier
@@ -202,18 +212,12 @@ fun SignInScreen(
                     onClick = {
 
                         coroutineScope.launch {
-
-
-                            if (viewModel.isValidUser()) {
-                                //viewModel.login()
-                                onSignSuccess()
-                            } else {
-                                coroutineScope.launch {
-                                    snackBarHostState.showSnackbar("아이디 또는 비밀번호가 일치하지 않습니다.")
-                                }
-                            }
-
+                            viewModel.onSuccessLogin(
+                                state.id,
+                                state.password
+                            )
                         }
+
 
                     },
                     modifier = Modifier

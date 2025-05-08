@@ -2,7 +2,9 @@ package org.sopt.at.data.impl
 
 import androidx.compose.runtime.saveable.autoSaver
 import kotlinx.coroutines.flow.Flow
+import org.sopt.at.data.dto.request.SignInRequestDto
 import org.sopt.at.data.dto.request.SignUpRequestDto
+import org.sopt.at.data.dto.response.SignInResponse
 import org.sopt.at.data.dto.response.SignUpResponse
 import org.sopt.at.data.dto.service.AuthService
 import org.sopt.at.data.local.UserLocalDataSource
@@ -62,6 +64,29 @@ class UserRepositoryImpl @Inject constructor(
         }
 
 
+    }
+
+
+    override suspend fun signInUser(signInRequestDto: SignInRequestDto): Result<SignInResponse> {
+        return try {
+
+            val response = authService.signInUser(signInRequestDto)
+
+
+            if (response.isSuccessful) {
+                val body = response.body()!!
+                if (body.success && body.data != null) {
+                    Result.success(body.data)
+                } else {
+                    Result.failure((Exception(body.message)))
+                }
+            } else {
+                Result.failure(Exception("서버 오류: ${response.code()}"))
+            }
+
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
     }
 
 

@@ -1,8 +1,10 @@
 package org.sopt.at.domain.repository
 
 import kotlinx.coroutines.flow.Flow
+import org.sopt.at.data.dto.request.SignInRequestDto
 import org.sopt.at.data.dto.request.SignUpRequestDto
 import org.sopt.at.data.dto.response.BaseResponse
+import org.sopt.at.data.dto.response.SignInResponse
 import org.sopt.at.data.dto.response.SignUpResponse
 
 interface UserRepository {
@@ -17,5 +19,10 @@ interface UserRepository {
     suspend fun signUpUser(
         signUpRequestDto: SignUpRequestDto
     ): Result<SignUpResponse>
+
+
+    suspend fun signInUser(
+        signInRequestDto: SignInRequestDto
+    ): Result<SignInResponse>
 
 }
