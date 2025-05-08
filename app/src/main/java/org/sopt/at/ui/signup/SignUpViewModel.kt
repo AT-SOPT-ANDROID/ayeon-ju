@@ -30,6 +30,14 @@ class SignUpViewModel @Inject constructor(
     private val _userNickname = MutableStateFlow("")
     val userNickname: StateFlow<String> = _userNickname.asStateFlow()
 
+
+    enum class SignUpStep {
+        ID, PASSWORD, NICKNAME
+    }
+
+    private val _signUpStep = MutableStateFlow(SignUpStep.ID)
+    val signUpStep = _signUpStep.asStateFlow()
+
     private val _isPasswordVisible = MutableStateFlow(false)
     val isPasswordVisible = _isPasswordVisible.asStateFlow()
 
@@ -53,14 +61,16 @@ class SignUpViewModel @Inject constructor(
         _userPassword.value = password
     }
 
-    fun saveUserInfo() {
-        viewModelScope.launch {
-            userRepository.saveUserInfo(_userId.value, _userPassword.value)
-        }
-    }
+
 
     fun updateNickname(nickname: String) {
         _userNickname.value = nickname
+    }
+
+    fun saveUserInfo() {
+        viewModelScope.launch {
+            userRepository.saveUserInfo(_userId.value, _userPassword.value, _userNickname.value)
+        }
     }
 
 
@@ -73,8 +83,31 @@ class SignUpViewModel @Inject constructor(
 
     fun validatePassword(): Boolean = _userPassword.value.matches(passwordRegex)
 
-    fun onNextClick() {
-        _isIdScreen.value = false
+    //onNextClick() 확장
+
+    fun onNextClick(onComplete:() -> Unit ) {
+        when(_signUpStep.value) {
+            SignUpStep.ID -> {
+                if (validateId()) {
+                    _signUpStep.value = SignUpStep.PASSWORD
+                }
+
+
+            }
+
+            SignUpStep.PASSWORD -> {
+                if (validatePassword()) {
+                    _signUpStep.value = SignUpStep.NICKNAME
+                }
+            }
+
+            SignUpStep.NICKNAME -> {
+                if (_userNickname.value.isNotBlank()) {
+                    saveUserInfo()
+                    onComplete()
+                }
+            }
+        }
 
     }
 

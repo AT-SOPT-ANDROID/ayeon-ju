@@ -1,5 +1,7 @@
 package org.sopt.at.ui.signup
 
+import android.R.attr.onClick
+import android.R.attr.text
 import android.graphics.drawable.Icon
 import android.os.Bundle
 import android.widget.Toast
@@ -49,8 +51,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import org.sopt.at.R
+import org.sopt.at.domain.repository.UserRepository
 import org.sopt.at.ui.component.SignUpTextField
 import org.sopt.at.ui.component.TvingBasicButton
+import org.sopt.at.ui.signup.SignUpViewModel.SignUpStep
 import org.sopt.at.ui.theme.ATSOPTANDROIDTheme
 import kotlin.math.sin
 
@@ -70,9 +74,9 @@ fun SignUpScreen(
 
     val isIdScreen by viewModel.isIdScreen.collectAsState()
 
-    val context = LocalContext.current
+    val signUpStep by viewModel.signUpStep.collectAsState()
 
-    //val authPreferences = remember { AuthPreferences(context) }
+    val context = LocalContext.current
 
 
     Column(
@@ -89,143 +93,211 @@ fun SignUpScreen(
 
         Spacer(modifier = Modifier.padding(10.dp))
 
-        if (isIdScreen) {
+        when(signUpStep) {
 
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(15.dp)
-                    .weight(1f),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
+             SignUpStep.ID ->  {
 
-                Text(
-                    text = "아이디를 입력해주세요.",
-                    color = Color.White,
-                    fontSize = 20.sp,
-                    fontWeight = Bold
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(15.dp)
+                        .weight(1f),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
 
-                )
+                    Text(
+                        text = "아이디를 입력해주세요.",
+                        color = Color.White,
+                        fontSize = 20.sp,
+                        fontWeight = Bold
 
-                Spacer(modifier = Modifier.padding(10.dp))
+                    )
 
-                SignUpTextField(
-                    value = userId,
-                    onValueChange = viewModel::updateId,
-                    label = "아이디",
-                    onPasswordVisibilityToggle = {},
-                    isPasswordField = false,
-                    isVisiblePassword = false,
-                    onNextClick = {},
-                    trailingIcon = null
-                )
+                    Spacer(modifier = Modifier.padding(10.dp))
 
-                Spacer(modifier = Modifier.padding(10.dp))
+                    SignUpTextField(
+                        value = userId,
+                        onValueChange = viewModel::updateId,
+                        label = "아이디",
+                        onPasswordVisibilityToggle = {},
+                        isPasswordField = false,
+                        isVisiblePassword = false,
+                        onNextClick = {},
+                        trailingIcon = null
+                    )
 
-                Text(
-                    text = "영문 소문자 또는 영문 소문자, 숫자 조합 6~12자리",
-                    fontSize = 12.sp,
-                    color = Color.DarkGray,
-                    modifier = Modifier.fillMaxWidth()
-                )
+                    Spacer(modifier = Modifier.padding(10.dp))
 
+                    Text(
+                        text = "영문 소문자 또는 영문 소문자, 숫자 조합 6~12자리",
+                        fontSize = 12.sp,
+                        color = Color.DarkGray,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+
+
+                }
+
+                TvingBasicButton(
+                    text = "다음",
+                    onClick = {
+                        if (viewModel.validateId()) {
+
+                            viewModel.onNextClick(onSignUpSuccess)
+
+
+                        } else {
+
+                            Toast.makeText(
+                                context,
+                                "아이디는 영문 소문자, 숫자로 이루어진 6~12 자리여야합니다.",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            return@TvingBasicButton
+
+                        }
+                    },
+
+                    )
 
             }
 
-            TvingBasicButton(
-                text = "다음",
-                onClick = {
-                    if (viewModel.validateId()) {
+            SignUpStep.PASSWORD -> {
 
-                        viewModel.onNextClick()
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(15.dp)
+                        .weight(1f),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
 
+                    Text(
+                        text = "비밀번호를 입력해주세요",
+                        color = Color.White,
+                        fontSize = 20.sp,
+                        fontWeight = Bold
 
-                    } else {
+                    )
 
-                        Toast.makeText(
-                            context,
-                            "아이디는 영문 소문자, 숫자로 이루어진 6~12 자리여야합니다.",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        return@TvingBasicButton
-
-                    }
-                },
-
-                )
-
-        } else {
-
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(15.dp)
-                    .weight(1f),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-
-                Text(
-                    text = "비밀번호를 입력해주세요",
-                    color = Color.White,
-                    fontSize = 20.sp,
-                    fontWeight = Bold
-
-                )
-
-                Spacer(modifier = Modifier.padding(10.dp))
+                    Spacer(modifier = Modifier.padding(10.dp))
 
 
-                SignUpTextField(
-                    value = userPassword,
-                    onValueChange = viewModel::updatePassword,
-                    label = "비밀번호",
-                    isPasswordField = true,
-                    isVisiblePassword = isPasswordVisible,
-                    onPasswordVisibilityToggle = { viewModel.togglePasswordVisibility() },
-                    onNextClick = {},
-                    trailingIcon = {
-                        val icon =
-                            if (isPasswordVisible) R.drawable.ic_password_visible else R.drawable.ic_password_invisible
-                        IconButton(onClick = { viewModel.togglePasswordVisibility() }) {
-                            Icon(painter = painterResource(icon), contentDescription = "비밀번호 보기")
+                    SignUpTextField(
+                        value = userPassword,
+                        onValueChange = viewModel::updatePassword,
+                        label = "비밀번호",
+                        isPasswordField = true,
+                        isVisiblePassword = isPasswordVisible,
+                        onPasswordVisibilityToggle = { viewModel.togglePasswordVisibility() },
+                        onNextClick = {},
+                        trailingIcon = {
+                            val icon =
+                                if (isPasswordVisible) R.drawable.ic_password_visible else R.drawable.ic_password_invisible
+                            IconButton(onClick = { viewModel.togglePasswordVisibility() }) {
+                                Icon(painter = painterResource(icon), contentDescription = "비밀번호 보기")
+                            }
+
                         }
 
-                    }
+
+                    )
+
+                    Spacer(modifier = Modifier.padding(10.dp))
+
+                    Text(
+                        text = "영문 숫자, 특수문자(~!@#$%^&*) 조합 8~15자리",
+                        fontSize = 12.sp,
+                        color = Color.DarkGray,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+
+                }
 
 
+                TvingBasicButton(
+                    text = "다음",
+                    onClick = {
+                        if (viewModel.validatePassword()) {
+                            //authPreferences.saveAuthPreference(userId, userPassword)
+                            //onSignUpSuccess()
+                            //viewModel.saveUserInfo()
+                            //onSignUpSuccess()
+                            viewModel.onNextClick(onSignUpSuccess)
+
+                        } else {
+                            Toast.makeText(
+                                context,
+                                "비밀번호는 영문, 숫자, 특수문자를 포함한 8~12자리여야 합니다.",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            return@TvingBasicButton
+                        }
+                    },
                 )
 
-                Spacer(modifier = Modifier.padding(10.dp))
+            }
 
-                Text(
-                    text = "영문 숫자, 특수문자(~!@#$%^&*) 조합 8~15자리",
-                    fontSize = 12.sp,
-                    color = Color.DarkGray,
-                    modifier = Modifier.fillMaxWidth()
+            SignUpStep.NICKNAME -> {
+
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(15.dp)
+                        .weight(1f),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+
+                    Text(
+                        text = "닉네임을 입력해주세요",
+                        color = Color.White,
+                        fontSize = 20.sp,
+                        fontWeight = Bold
+
+                    )
+
+                    Spacer(modifier = Modifier.padding(10.dp))
+
+
+                    SignUpTextField(
+                        value = userNickname,
+                        onValueChange = viewModel::updateNickname,
+                        label = "닉네임",
+                        isPasswordField = true,
+                        isVisiblePassword = isPasswordVisible,
+                        onPasswordVisibilityToggle = {  },
+                        onNextClick = {},
+                        trailingIcon = {}
+
+
+                    )
+
+                    Spacer(modifier = Modifier.padding(10.dp))
+
+                    Text(
+                        text = "영문 숫자, 특수문자(~!@#$%^&*) 조합 8~15자리",
+                        fontSize = 12.sp,
+                        color = Color.DarkGray,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+
+                }
+
+
+                TvingBasicButton(
+                    text = "다음",
+                    onClick = { viewModel.onNextClick(onSignUpSuccess) }
                 )
 
             }
 
 
-            TvingBasicButton(
-                text = "다음",
-                onClick = {
-                    if (viewModel.validatePassword()) {
-                        //authPreferences.saveAuthPreference(userId, userPassword)
-                        //onSignUpSuccess()
-                        viewModel.saveUserInfo()
-                        onSignUpSuccess()
+            }
 
-                    } else {
-                        Toast.makeText(
-                            context,
-                            "비밀번호는 영문, 숫자, 특수문자를 포함한 8~12자리여야 합니다.",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        return@TvingBasicButton
-                    }
-                },
-              )
+            }
+
+
+
 
 
             Spacer(modifier = Modifier.padding(10.dp))
@@ -253,9 +325,12 @@ fun SignUpScreen(
 //            )
 
 
-        }
 
-    }
 
 }
+
+
+
+
+
 
