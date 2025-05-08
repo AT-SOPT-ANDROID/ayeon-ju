@@ -29,6 +29,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -77,6 +78,19 @@ fun SignUpScreen(
     val signUpStep by viewModel.signUpStep.collectAsState()
 
     val context = LocalContext.current
+
+    LaunchedEffect(Unit) {
+        viewModel.signUpResult.collect{ isSuccess ->
+            if (isSuccess) {
+                onSignUpSuccess()
+            } else {
+                Toast.makeText(context, "회원가입 실패", Toast.LENGTH_SHORT).show()
+            }
+
+        }
+    }
+
+
 
 
     Column(
@@ -250,7 +264,7 @@ fun SignUpScreen(
 
                     Text(
                         text = "닉네임을 입력해주세요",
-                        color = Color.White,
+                        color = ATSOPTANDROIDTheme.colors.basicWhite,
                         fontSize = 20.sp,
                         fontWeight = Bold
 
@@ -263,11 +277,11 @@ fun SignUpScreen(
                         value = userNickname,
                         onValueChange = viewModel::updateNickname,
                         label = "닉네임",
-                        isPasswordField = true,
-                        isVisiblePassword = isPasswordVisible,
-                        onPasswordVisibilityToggle = {  },
+                        onPasswordVisibilityToggle = {},
+                        isPasswordField = false,
+                        isVisiblePassword = false,
                         onNextClick = {},
-                        trailingIcon = {}
+                        trailingIcon = null
 
 
                     )
@@ -275,7 +289,7 @@ fun SignUpScreen(
                     Spacer(modifier = Modifier.padding(10.dp))
 
                     Text(
-                        text = "영문 숫자, 특수문자(~!@#$%^&*) 조합 8~15자리",
+                        text = "한글/영문/숫자만 사용 가능, 1자 이상 20자 이하",
                         fontSize = 12.sp,
                         color = Color.DarkGray,
                         modifier = Modifier.fillMaxWidth()
@@ -286,18 +300,32 @@ fun SignUpScreen(
 
                 TvingBasicButton(
                     text = "다음",
-                    onClick = { viewModel.onNextClick(onSignUpSuccess) }
+                    onClick = { //viewModel.onNextClick(onSignUpSuccess)
+
+                        if (viewModel.validateNickname()) {
+
+                            viewModel.onCompleteLogin()
+
+
+                        } else {
+
+                            Toast.makeText(
+                                context,
+                                "닉네임은 한글/영문/숫자 1~20자여야 합니다.",
+                                Toast.LENGTH_SHORT
+                            ).show()
+
+                        }
+
+
+                    }
                 )
 
             }
 
-
             }
 
             }
-
-
-
 
 
             Spacer(modifier = Modifier.padding(10.dp))

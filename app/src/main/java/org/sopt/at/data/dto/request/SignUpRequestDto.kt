@@ -8,7 +8,8 @@ import kotlinx.serialization.Serializable
 data class SignUpRequestDto(
 
     @SerialName("loginId") val loginId: String,
-    @SerialName("password") val password: String
+    @SerialName("password") val password: String,
+    @SerialName("nickname") val nickname: String
 
 
 )
