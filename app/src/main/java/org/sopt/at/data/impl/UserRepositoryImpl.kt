@@ -12,8 +12,8 @@ class UserRepositoryImpl @Inject constructor(
 
 
 
-    override suspend fun saveUserInfo(id: String, password: String) {
-        userLocalDataSource.saveUserInfo(id, password)
+    override suspend fun saveUserInfo(id: String, password: String, nickname: String) {
+        userLocalDataSource.saveUserInfo(id, password, nickname)
     }
 
     override fun getUserId(): Flow<String> {
@@ -23,6 +23,11 @@ class UserRepositoryImpl @Inject constructor(
     override fun getUserPassword(): Flow<String> {
         return userLocalDataSource.getUserPassWord()
     }
+
+    override fun getUserNickName(): Flow<String> {
+        return userLocalDataSource.getUserNickname()
+    }
+
 
     override suspend fun isLoggedIn(): Flow<Boolean> {
         return userLocalDataSource.isLoggedIn()

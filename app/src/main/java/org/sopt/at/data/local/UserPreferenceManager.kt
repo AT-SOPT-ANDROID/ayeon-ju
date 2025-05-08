@@ -22,12 +22,14 @@ class UserPreferenceManager @Inject constructor(
     companion object{
         val USER_ID = stringPreferencesKey("user_id")
         val USER_PASSWORD = stringPreferencesKey("user_password")
+        val USER_NICKNAME = stringPreferencesKey("user_nickname")
     }
 
-    suspend fun saveUserInfo(id: String, password: String) {
+    suspend fun saveUserInfo(id: String, password: String, nickname: String) {
         context.dataStore.edit { prefs->
             prefs[USER_ID] = id
             prefs[USER_PASSWORD] = password
+            prefs[USER_NICKNAME] = nickname
         }
     }
 
@@ -39,6 +41,10 @@ class UserPreferenceManager @Inject constructor(
 
     fun getUserPassword(): Flow<String> {
         return context.dataStore.data.map { it[USER_PASSWORD] ?:"" }
+    }
+
+    fun getUserNickname(): Flow<String> {
+        return context.dataStore.data.map { it[USER_NICKNAME] ?:"" }
     }
 
     fun isLoggedIn(): Flow<Boolean> {

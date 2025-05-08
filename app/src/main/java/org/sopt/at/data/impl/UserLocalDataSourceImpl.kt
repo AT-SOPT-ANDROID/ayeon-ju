@@ -9,8 +9,8 @@ class UserLocalDataSourceImpl @Inject constructor(
     private val userPreferenceManager: UserPreferenceManager
 ): UserLocalDataSource {
 
-    override suspend fun saveUserInfo(id: String, password: String) {
-        userPreferenceManager.saveUserInfo(id, password)
+    override suspend fun saveUserInfo(id: String, password: String, nickname: String) {
+        userPreferenceManager.saveUserInfo(id, password, nickname)
 
     }
 
@@ -21,6 +21,12 @@ class UserLocalDataSourceImpl @Inject constructor(
     override fun getUserPassWord(): Flow<String> {
         return userPreferenceManager.getUserPassword()
     }
+
+    override fun getUserNickname(): Flow<String> {
+        return userPreferenceManager.getUserNickname()
+    }
+
+
 
     override suspend fun isLoggedIn(): Flow<Boolean> {
         return userPreferenceManager.isLoggedIn()
