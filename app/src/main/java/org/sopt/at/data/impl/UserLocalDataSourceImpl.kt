@@ -31,4 +31,12 @@ class UserLocalDataSourceImpl @Inject constructor(
     override suspend fun isLoggedIn(): Flow<Boolean> {
         return userPreferenceManager.isLoggedIn()
     }
+
+    override suspend fun saveUserId(userId: Long) {
+        userPreferenceManager.saveUserId(userId)
+    }
+
+    override fun getUserIdLong(): Flow<Long> {
+        return userPreferenceManager.getUserIdLong()
+    }
 }

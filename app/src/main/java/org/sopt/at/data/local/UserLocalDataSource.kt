@@ -11,4 +11,7 @@ interface UserLocalDataSource {
     fun getUserNickname(): Flow<String>
 
     suspend fun isLoggedIn(): Flow<Boolean>
+
+    suspend fun saveUserId(userId: Long)
+    fun getUserIdLong(): Flow<Long>
 }
