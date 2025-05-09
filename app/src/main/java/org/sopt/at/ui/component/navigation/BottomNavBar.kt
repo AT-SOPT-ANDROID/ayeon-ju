@@ -16,12 +16,13 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 
 
 @Composable
-fun BottomNavBar() {
+fun BottomNavBar(navController: NavHostController) {
 
     val navController = rememberNavController()
 

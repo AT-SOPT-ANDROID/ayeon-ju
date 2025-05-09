@@ -1,15 +1,10 @@
 package org.sopt.at.ui.signin
 
-import android.app.Activity
-import android.content.Intent
 import android.widget.Toast
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -22,7 +17,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -35,7 +29,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -46,21 +39,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import org.sopt.at.R
-import org.sopt.at.ui.home.HomeScreen
 import org.sopt.at.ui.theme.ATSOPTANDROIDTheme
-import kotlin.jvm.java
 
 
 @Composable
@@ -68,7 +53,7 @@ fun SignInScreen(
 
     viewModel: SignInViewModel = hiltViewModel(),
     onSignSuccess: () -> Unit,
-    onNavigateToSignUp:() -> Unit
+    onNavigateToSignUp: () -> Unit
 
 ) {
 
@@ -76,12 +61,8 @@ fun SignInScreen(
     val state by viewModel.state.collectAsState()
     var isVisiblePassword by remember { mutableStateOf(false) }
     val context = LocalContext.current
-
     val coroutineScope = rememberCoroutineScope()
-
     val snackBarHostState = remember { SnackbarHostState() }
-
-
 
 
     LaunchedEffect(Unit) {
@@ -94,9 +75,7 @@ fun SignInScreen(
             } else {
                 snackBarHostState.showSnackbar("로그인 실패")
             }
-
         }
-
     }
 
     Column(
@@ -122,7 +101,7 @@ fun SignInScreen(
 
                 Text(
                     text = "TVING ID 로그인",
-                    color = Color.White,
+                    color = ATSOPTANDROIDTheme.colors.basicWhite,
                     fontSize = 20.sp,
                     fontWeight = Bold,
                     modifier = Modifier
@@ -153,7 +132,7 @@ fun SignInScreen(
                         Text(
                             "아이디",
                             textAlign = TextAlign.Center,
-                            color = ATSOPTANDROIDTheme.colors.basicBlack,
+                            color = ATSOPTANDROIDTheme.colors.gray02,
                             fontSize = 14.sp
                         )
                     }
@@ -202,7 +181,7 @@ fun SignInScreen(
                         Text(
                             "비밀번호",
                             textAlign = TextAlign.Center,
-                            color = Color.LightGray,
+                            color = ATSOPTANDROIDTheme.colors.gray02,
                             fontSize = 14.sp
                         )
                     }
@@ -228,7 +207,7 @@ fun SignInScreen(
                         Color.DarkGray
                     )
                 ) {
-                    Text("로그인하기", color = Color.Gray)
+                    Text("로그인하기", color = ATSOPTANDROIDTheme.colors.gray02)
                 }
 
                 Spacer(modifier = Modifier.padding(10.dp))
@@ -258,7 +237,7 @@ fun SignInScreen(
 
                     Text(
                         text = "비밀번호 찾기",
-                        color = Color.White,
+                        color = ATSOPTANDROIDTheme.colors.basicWhite,
                         fontSize = 12.sp
                     )
 
@@ -270,7 +249,7 @@ fun SignInScreen(
 
                     Text(
                         text = "회원가입",
-                        color = Color.White,
+                        color = ATSOPTANDROIDTheme.colors.basicWhite,
                         fontSize = 12.sp,
                         modifier = Modifier
                             .clickable {
@@ -284,7 +263,7 @@ fun SignInScreen(
                         "보호되며,",
                         "보호되며,\n"
                     ),
-                    color = Color.LightGray,
+                    color = ATSOPTANDROIDTheme.colors.gray01,
                     fontSize = 10.sp,
                     modifier = Modifier
                         .fillMaxWidth()

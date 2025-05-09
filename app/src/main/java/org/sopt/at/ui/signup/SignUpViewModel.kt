@@ -1,10 +1,5 @@
 package org.sopt.at.ui.signup
 
-import android.util.Log
-import android.widget.Toast
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -48,10 +43,6 @@ class SignUpViewModel @Inject constructor(
     val isPasswordVisible = _isPasswordVisible.asStateFlow()
 
 
-    private val _isIdScreen = MutableStateFlow(true)
-    val isIdScreen = _isIdScreen.asStateFlow()
-
-
     companion object {
         private val idRegex = Regex("^[a-z0-9]{6,12}$")
         private val passwordRegex = Regex("^[a-zA-Z\\\\d]{8,20}\$")
@@ -60,15 +51,13 @@ class SignUpViewModel @Inject constructor(
     }
 
 
-
-    fun updateId(id : String) {
+    fun updateId(id: String) {
         _userId.value = id
     }
 
-    fun updatePassword(password : String) {
+    fun updatePassword(password: String) {
         _userPassword.value = password
     }
-
 
 
     fun updateNickname(nickname: String) {
@@ -93,14 +82,12 @@ class SignUpViewModel @Inject constructor(
     fun validateNickname(): Boolean = _userNickname.value.matches(nicknameRegex)
 
 
-    fun onNextClick(onComplete:() -> Unit ) {
-        when(_signUpStep.value) {
+    fun onNextClick(onComplete: () -> Unit) {
+        when (_signUpStep.value) {
             SignUpStep.ID -> {
                 if (validateId()) {
                     _signUpStep.value = SignUpStep.PASSWORD
                 }
-
-
             }
 
             SignUpStep.PASSWORD -> {
@@ -113,11 +100,9 @@ class SignUpViewModel @Inject constructor(
                 if (validateNickname()) {
                     saveUserInfo()
 
-
                 }
             }
         }
-
     }
 
     fun onCompleteLogin() {
@@ -134,21 +119,5 @@ class SignUpViewModel @Inject constructor(
                 _signUpResult.emit(false)
             }
         }
-
     }
-
-//    fun signUp(id: String, pw: String, nickname: String) {
-//        viewModelScope.launch {
-//            val result = userRepository.signUpUser(
-//                SignUpRequestDto(id, pw, nickname)
-//            )
-//            result.onSuccess {
-//                _signUpSuccess.emit(true)
-//            }.onFailure {
-//                _signUpError.emit(it.message ?: "회원가입 실패")
-//            }
-//        }
-//    }
-
-
 }

@@ -5,12 +5,11 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import org.sopt.at.ui.component.navigation.AuthNavItem
 import org.sopt.at.ui.component.navigation.MainNavHost
 import org.sopt.at.ui.theme.ATSOPTANDROIDTheme
-import androidx.compose.runtime.*
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -18,7 +17,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-
 
 
             ATSOPTANDROIDTheme {
@@ -32,7 +30,7 @@ class MainActivity : ComponentActivity() {
 
 
                 }
-             }
-           }
+            }
         }
     }
+}
