@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import org.sopt.at.ui.history.historyNavigation
 import org.sopt.at.ui.home.homeNavigation
 import org.sopt.at.ui.live.liveNavigation
+import org.sopt.at.ui.my.myNavigation
 import org.sopt.at.ui.search.searchNavigation
 import org.sopt.at.ui.shorts.shortsNavigation
 
@@ -17,16 +18,18 @@ fun BottomNavHost(
     startDestination: String = BottomNavItem.Home.route
 ) {
     NavHost(
-        modifier = Modifier,
+        modifier = modifier,
         navController = navController,
         startDestination = startDestination
     ) {
 
-        homeNavigation()
+        homeNavigation(navController)
         shortsNavigation()
         liveNavigation()
         searchNavigation()
         historyNavigation()
+
+        myNavigation(navController)
     }
 
 

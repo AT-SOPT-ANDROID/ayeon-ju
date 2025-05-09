@@ -17,7 +17,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -27,7 +26,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
@@ -39,134 +37,124 @@ import org.sopt.at.ui.component.TvingHomeTopBar
 
 @Composable
 fun HomeScreen(
-    viewModel: HomeViewModel
+    viewModel: HomeViewModel,
+    onProfileClick: () -> Unit
 ) {
 
     val state by viewModel.state.collectAsState()
 
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Black)
+            .padding(),
+        contentPadding = PaddingValues(vertical = 16.dp)
+    ) {
 
-    val context = LocalContext.current
-
-
-    Scaffold(
-        topBar = { TvingHomeTopBar() },
-
-        ) { innerPadding ->
-
-
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color.Black)
-                .padding(innerPadding),
-            contentPadding = PaddingValues(vertical = 16.dp)
-        ) {
+        item {
+            TvingHomeTopBar(onProfileClick = onProfileClick)
+        }
 
 
-            item {
-                Spacer(modifier = Modifier.height(16.dp))
+        item {
+            Spacer(modifier = Modifier.height(16.dp))
+        }
+
+
+        item {
+
+            LazyRow(
+
+                contentPadding = PaddingValues(horizontal = 5.dp),
+                horizontalArrangement = Arrangement.spacedBy(5.dp)
+            ) {
+
+                items(state.mainBanners) { banner ->
+                    BannerItem(imageRes = banner)
+                }
             }
+        }
+
+        item {
+            Spacer(modifier = Modifier.height(26.dp))
+        }
+
+        item {
+
+            Text(
+                modifier = Modifier
+                    .padding(10.dp),
+                text = "오늘의 TVING TOP 20",
+                color = Color.White,
+                fontWeight = Bold,
+                fontSize = 14.sp
+            )
+        }
 
 
-            item {
+        item {
 
-                LazyRow(
+            LazyRow(
+                contentPadding = PaddingValues(horizontal = 16.dp),
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
 
-                    contentPadding = PaddingValues(horizontal = 5.dp),
-                    horizontalArrangement = Arrangement.spacedBy(5.dp)
-                ) {
+                items(state.rankBanners) { item ->
 
-                    items(state.mainBanners) { banner ->
-                        BannerItem(imageRes = banner)
-                    }
-
+                    RankingItem(rank = item)
 
                 }
 
             }
 
-            item {
-                Spacer(modifier = Modifier.height(26.dp))
-            }
+        }
 
-            item {
+        item {
+            Spacer(modifier = Modifier.height(26.dp))
+        }
+
+
+        item {
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(10.dp),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
 
                 Text(
-                    modifier = Modifier
-                        .padding(10.dp),
-                    text = "오늘의 TVING TOP 20",
+
+                    text = "지금 방영 중인 콘텐츠",
                     color = Color.White,
                     fontWeight = Bold,
                     fontSize = 14.sp
                 )
 
-            }
+                Text(
 
-
-            item {
-
-                LazyRow(
-                    contentPadding = PaddingValues(horizontal = 16.dp),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
-
-                    items(state.rankBanners) { item ->
-
-                        RankingItem(rank = item)
-
-                    }
-
-                }
-
-            }
-
-            item {
-                Spacer(modifier = Modifier.height(26.dp))
-            }
-
-
-            item {
-
-                Row(
+                    text = "더보기",
+                    color = Color.LightGray,
+                    fontWeight = Medium,
+                    fontSize = 14.sp,
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(10.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-
-                    Text(
-
-                        text = "지금 방영 중인 콘텐츠",
-                        color = Color.White,
-                        fontWeight = Bold,
-                        fontSize = 14.sp
-                    )
-
-                    Text(
-
-                        text = "더보기",
-                        color = Color.LightGray,
-                        fontWeight = Medium,
-                        fontSize = 14.sp,
-                        modifier = Modifier
-                            .clickable { }
-                    )
-                }
-
+                        .clickable { }
+                )
             }
 
-            item {
-                LazyRow(
-                    contentPadding = PaddingValues(horizontal = 16.dp),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
+        }
+
+        item {
+            LazyRow(
+                contentPadding = PaddingValues(horizontal = 16.dp),
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
 
 
-                    items(state.onAirImages) { item ->
+                items(state.onAirImages) { item ->
 
-                        OnAirItem(poster = item)
+                    OnAirItem(poster = item)
 
-                    }
                 }
             }
         }
@@ -191,8 +179,6 @@ fun BannerItem(imageRes: Int) {
             contentScale = ContentScale.Crop
         )
     }
-
-
 }
 
 @Composable
@@ -223,7 +209,6 @@ fun RankingItem(rank: HomeRanking) {
                 .aspectRatio(2f / 3f)
                 .clip(RoundedCornerShape(8.dp))
         )
-
     }
 }
 
@@ -240,7 +225,6 @@ fun OnAirItem(poster: Int) {
             .aspectRatio(2f / 3f)
             .clip(RoundedCornerShape(8.dp))
     )
-
 }
 
 

@@ -1,8 +1,6 @@
 package org.sopt.at.ui.component.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavController
-import androidx.navigation.NavDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -28,7 +26,7 @@ fun MainNavHost(
 
 
         composable("main") {
-            BottomNavBar()
+            BottomNavBar(navController = navController)
         }
     }
 
